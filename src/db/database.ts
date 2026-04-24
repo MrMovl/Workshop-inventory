@@ -1,25 +1,68 @@
 import { SQLiteDatabase } from 'expo-sqlite';
-import { Box, Item } from '../types';
-import { CREATE_BOXES_TABLE, CREATE_ITEMS_TABLE } from './schema';
+import { Box, Category, Item } from '../types';
+import { CREATE_BOXES_TABLE, CREATE_CATEGORIES_TABLE, CREATE_ITEMS_TABLE } from './schema';
 
 export async function initDatabase(db: SQLiteDatabase): Promise<void> {
-  await db.execAsync(CREATE_BOXES_TABLE + CREATE_ITEMS_TABLE);
+  await db.execAsync(CREATE_CATEGORIES_TABLE + CREATE_BOXES_TABLE + CREATE_ITEMS_TABLE);
+  // Migrate existing boxes table — ignore errors if columns already exist
+  for (const sql of [
+    "ALTER TABLE boxes ADD COLUMN description TEXT NOT NULL DEFAULT ''",
+    'ALTER TABLE boxes ADD COLUMN photoUri TEXT',
+    'ALTER TABLE boxes ADD COLUMN categoryId INTEGER REFERENCES categories(id) ON DELETE SET NULL',
+  ]) {
+    try { await db.execAsync(sql); } catch { /* column already exists */ }
+  }
 }
 
 export async function getBoxes(db: SQLiteDatabase): Promise<Box[]> {
   return db.getAllAsync<Box>('SELECT * FROM boxes ORDER BY createdAt DESC');
 }
 
-export async function createBox(db: SQLiteDatabase, name: string): Promise<void> {
-  await db.runAsync('INSERT INTO boxes (name) VALUES (?)', name);
+export async function createBox(
+  db: SQLiteDatabase,
+  name: string,
+  description: string,
+  photoUri: string | null,
+  categoryId: number | null,
+): Promise<void> {
+  await db.runAsync(
+    'INSERT INTO boxes (name, description, photoUri, categoryId) VALUES (?, ?, ?, ?)',
+    name, description, photoUri, categoryId,
+  );
 }
 
-export async function updateBox(db: SQLiteDatabase, id: number, name: string): Promise<void> {
-  await db.runAsync('UPDATE boxes SET name = ? WHERE id = ?', name, id);
+export async function updateBox(
+  db: SQLiteDatabase,
+  id: number,
+  name: string,
+  description: string,
+  photoUri: string | null,
+  categoryId: number | null,
+): Promise<void> {
+  await db.runAsync(
+    'UPDATE boxes SET name = ?, description = ?, photoUri = ?, categoryId = ? WHERE id = ?',
+    name, description, photoUri, categoryId, id,
+  );
 }
 
 export async function deleteBox(db: SQLiteDatabase, id: number): Promise<void> {
   await db.runAsync('DELETE FROM boxes WHERE id = ?', id);
+}
+
+export async function getCategories(db: SQLiteDatabase): Promise<Category[]> {
+  return db.getAllAsync<Category>('SELECT * FROM categories ORDER BY name ASC');
+}
+
+export async function createCategory(
+  db: SQLiteDatabase,
+  name: string,
+  color: string,
+): Promise<number> {
+  const result = await db.runAsync(
+    'INSERT INTO categories (name, color) VALUES (?, ?)',
+    name, color,
+  );
+  return result.lastInsertRowId;
 }
 
 export async function getItemsByBox(db: SQLiteDatabase, boxId: number): Promise<Item[]> {
@@ -74,7 +117,7 @@ export async function searchAll(
     return db.getAllAsync(
       `SELECT 'item' AS type, id, name, description FROM items WHERE name LIKE ? OR description LIKE ?
        UNION ALL
-       SELECT 'box' AS type, id, name, '' AS description FROM boxes WHERE name LIKE ?
+       SELECT 'box' AS type, id, name, description FROM boxes WHERE name LIKE ?
        LIMIT ? OFFSET ?`,
       like, like, like, limit, offset,
     );
