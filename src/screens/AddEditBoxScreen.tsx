@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
 import { useSQLiteContext } from 'expo-sqlite';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -54,14 +55,21 @@ export default function AddEditBoxScreen({ navigation }: Props) {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       allowsEditing: true,
-      // quality 0.7 reduces JPEG file size significantly while keeping it sharp enough
-      // for a workshop inventory thumbnail. Pixel-dimension capping requires
-      // expo-image-manipulator if ever needed.
-      quality: 0.7,
+      quality: 1, // pick full quality; we resize below
     });
-    if (!result.canceled) {
-      setPhotoUri(result.assets[0].uri);
-    }
+    if (result.canceled) return;
+
+    const asset = result.assets[0];
+    const MAX = 600;
+    const ratio = Math.min(MAX / asset.width, MAX / asset.height, 1);
+    const resized = await ImageManipulator.manipulateAsync(
+      asset.uri,
+      ratio < 1
+        ? [{ resize: { width: Math.round(asset.width * ratio), height: Math.round(asset.height * ratio) } }]
+        : [],
+      { compress: 0.8, format: ImageManipulator.SaveFormat.JPEG },
+    );
+    setPhotoUri(resized.uri);
   }
 
   async function handleSave() {
@@ -128,7 +136,7 @@ export default function AddEditBoxScreen({ navigation }: Props) {
         <Text style={styles.label}>Image</Text>
         {photoUri ? (
           <View style={styles.imageContainer}>
-            <Image source={{ uri: photoUri }} style={styles.imagePreview} resizeMode="cover" />
+            <Image source={{ uri: photoUri }} style={styles.imagePreview} resizeMode="contain" />
             <Pressable style={styles.imageChangeBtn} onPress={pickImage}>
               <Text style={styles.imageChangeBtnText}>Change photo</Text>
             </Pressable>
@@ -239,7 +247,7 @@ const styles = StyleSheet.create({
   imagePickerIcon: { fontSize: 28 },
   imagePickerText: { color: '#888', fontSize: 15 },
   imageContainer: { gap: 8 },
-  imagePreview: { width: '100%', height: 200, borderRadius: 8 },
+  imagePreview: { width: '100%', height: 200, borderRadius: 8, backgroundColor: '#f0f0f0' },
   imageChangeBtn: {
     alignSelf: 'flex-start',
     paddingHorizontal: 12,
