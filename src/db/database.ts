@@ -61,3 +61,26 @@ export async function updateItem(
 export async function deleteItem(db: SQLiteDatabase, id: number): Promise<void> {
   await db.runAsync('DELETE FROM items WHERE id = ?', id);
 }
+
+export async function searchAll(
+  db: SQLiteDatabase,
+  query: string,
+  includeBoxes: boolean,
+  limit: number,
+  offset: number,
+): Promise<{ type: 'box' | 'item'; id: number; name: string; description: string }[]> {
+  const like = `%${query}%`;
+  if (includeBoxes) {
+    return db.getAllAsync(
+      `SELECT 'item' AS type, id, name, description FROM items WHERE name LIKE ? OR description LIKE ?
+       UNION ALL
+       SELECT 'box' AS type, id, name, '' AS description FROM boxes WHERE name LIKE ?
+       LIMIT ? OFFSET ?`,
+      like, like, like, limit, offset,
+    );
+  }
+  return db.getAllAsync(
+    `SELECT 'item' AS type, id, name, description FROM items WHERE name LIKE ? OR description LIKE ? LIMIT ? OFFSET ?`,
+    like, like, limit, offset,
+  );
+}

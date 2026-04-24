@@ -1,10 +1,12 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomeScreen from '../screens/HomeScreen';
 import BoxListScreen from '../screens/BoxListScreen';
 import BoxDetailScreen from '../screens/BoxDetailScreen';
 import AddEditBoxScreen from '../screens/AddEditBoxScreen';
 import AddEditItemScreen from '../screens/AddEditItemScreen';
 
 export type RootStackParamList = {
+  Home: undefined;
   BoxList: undefined;
   BoxDetail: { boxId: number; boxName: string };
   AddEditBox: { boxId?: number; boxName?: string };
@@ -16,7 +18,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function AppNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="BoxList" component={BoxListScreen} options={{ title: 'My Workshop' }} />
+      <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'My Workshop' }} />
+      <Stack.Screen name="BoxList" component={BoxListScreen} options={{ title: 'Boxes' }} />
       <Stack.Screen
         name="BoxDetail"
         component={BoxDetailScreen}
