@@ -97,7 +97,6 @@ export default function HomeScreen({ navigation }: Props) {
           placeholder="Search items and boxes…"
           value={query}
           onChangeText={setQuery}
-          clearButtonMode="while-editing"
           autoCorrect={false}
         />
       </View>
