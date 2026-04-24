@@ -1,7 +1,19 @@
+export const CREATE_CATEGORIES_TABLE = `
+  CREATE TABLE IF NOT EXISTS categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    color TEXT NOT NULL DEFAULT '#888888',
+    createdAt TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+`;
+
 export const CREATE_BOXES_TABLE = `
   CREATE TABLE IF NOT EXISTS boxes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
+    description TEXT NOT NULL DEFAULT '',
+    photoUri TEXT,
+    categoryId INTEGER REFERENCES categories(id) ON DELETE SET NULL,
     createdAt TEXT NOT NULL DEFAULT (datetime('now'))
   );
 `;

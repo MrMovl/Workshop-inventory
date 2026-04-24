@@ -1,6 +1,16 @@
+export interface Category {
+  id: number;
+  name: string;
+  color: string;
+  createdAt: string;
+}
+
 export interface Box {
   id: number;
   name: string;
+  description: string;
+  photoUri: string | null;
+  categoryId: number | null;
   createdAt: string;
 }
 
