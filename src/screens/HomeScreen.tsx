@@ -86,7 +86,7 @@ export default function HomeScreen({ navigation }: Props) {
         <Pressable style={styles.button} onPress={() => navigation.navigate('AddEditBox', {})}>
           <Text style={styles.buttonText}>Add Box</Text>
         </Pressable>
-        <Pressable style={styles.button} onPress={() => navigation.navigate('BoxList')}>
+        <Pressable style={styles.button} onPress={() => navigation.navigate('AddEditItem', {})}>
           <Text style={styles.buttonText}>Add Item</Text>
         </Pressable>
       </View>

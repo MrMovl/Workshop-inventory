@@ -13,6 +13,7 @@ export const CREATE_ITEMS_TABLE = `
     name TEXT NOT NULL,
     description TEXT NOT NULL DEFAULT '',
     photoUri TEXT,
+    amount INTEGER NOT NULL DEFAULT 1,
     createdAt TEXT NOT NULL DEFAULT (datetime('now')),
     FOREIGN KEY (boxId) REFERENCES boxes(id) ON DELETE CASCADE
   );

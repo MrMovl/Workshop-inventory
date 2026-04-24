@@ -4,6 +4,11 @@ import { CREATE_BOXES_TABLE, CREATE_ITEMS_TABLE } from './schema';
 
 export async function initDatabase(db: SQLiteDatabase): Promise<void> {
   await db.execAsync(CREATE_BOXES_TABLE + CREATE_ITEMS_TABLE);
+  try {
+    await db.execAsync('ALTER TABLE items ADD COLUMN amount INTEGER NOT NULL DEFAULT 1');
+  } catch {
+    // column already exists on prior installs
+  }
 }
 
 export async function getBoxes(db: SQLiteDatabase): Promise<Box[]> {
@@ -32,13 +37,15 @@ export async function createItem(
   name: string,
   description: string,
   photoUri: string | null,
+  amount: number,
 ): Promise<void> {
   await db.runAsync(
-    'INSERT INTO items (boxId, name, description, photoUri) VALUES (?, ?, ?, ?)',
+    'INSERT INTO items (boxId, name, description, photoUri, amount) VALUES (?, ?, ?, ?, ?)',
     boxId,
     name,
     description,
     photoUri,
+    amount,
   );
 }
 
@@ -48,13 +55,22 @@ export async function updateItem(
   name: string,
   description: string,
   photoUri: string | null,
+  amount: number,
 ): Promise<void> {
   await db.runAsync(
-    'UPDATE items SET name = ?, description = ?, photoUri = ? WHERE id = ?',
+    'UPDATE items SET name = ?, description = ?, photoUri = ?, amount = ? WHERE id = ?',
     name,
     description,
     photoUri,
+    amount,
     id,
+  );
+}
+
+export async function searchBoxes(db: SQLiteDatabase, query: string): Promise<Box[]> {
+  return db.getAllAsync<Box>(
+    'SELECT * FROM boxes WHERE name LIKE ? ORDER BY name ASC LIMIT 20',
+    `%${query}%`,
   );
 }
 
