@@ -12,3 +12,10 @@ export interface Item {
   photoUri: string | null;
   createdAt: string;
 }
+
+export interface SearchResult {
+  type: 'box' | 'item';
+  id: number;
+  name: string;
+  description: string;
+}
