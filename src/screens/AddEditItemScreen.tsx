@@ -18,7 +18,7 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
 import { persistPhoto } from '../utils/persistPhoto';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { createItem, getBoxById, getItemById, getRecentBoxes, searchBoxes, updateItem } from '../db/database';
+import { createItem, deleteItem, getBoxById, getItemById, getRecentBoxes, searchBoxes, updateItem } from '../db/database';
 import { colors, radius, space, type as t } from '../theme';
 import { Box } from '../types';
 import { RootStackParamList } from '../navigation/AppNavigator';
@@ -122,6 +122,20 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
   const unpickBox = useCallback(() => {
     setPickedBox(null);
   }, []);
+
+  const handleDelete = useCallback(() => {
+    Alert.alert(tr.item_deleteConfirmTitle, tr.item_deleteConfirmMessage, [
+      { text: tr.item_cancel, style: 'cancel' },
+      {
+        text: tr.item_deleteConfirm,
+        style: 'destructive',
+        onPress: async () => {
+          await deleteItem(db, itemId!);
+          navigation.goBack();
+        },
+      },
+    ]);
+  }, [db, itemId, navigation, tr]);
 
   const save = useCallback(async () => {
     let valid = true;
@@ -266,6 +280,12 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
           <Text style={styles.cancelBtnText}>{tr.item_cancel}</Text>
         </Pressable>
 
+        {itemId ? (
+          <Pressable style={styles.deleteBtn} onPress={handleDelete}>
+            <Text style={styles.deleteBtnText}>{tr.item_delete}</Text>
+          </Pressable>
+        ) : null}
+
       </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -326,4 +346,8 @@ const styles = StyleSheet.create({
   cancelBtn:    { marginTop: space[3], borderRadius: radius.md, paddingVertical: 14,
                   alignItems: 'center', borderWidth: 1, borderColor: colors.line },
   cancelBtnText:{ color: colors.inkMuted, fontSize: 15, fontWeight: '600' },
+
+  deleteBtn:    { marginTop: space[7], backgroundColor: colors.danger,
+                  borderRadius: radius.md, paddingVertical: 14, alignItems: 'center' },
+  deleteBtnText:{ color: colors.accentInk, fontSize: 15, fontWeight: '600' },
 });

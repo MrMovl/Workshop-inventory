@@ -47,6 +47,10 @@ export interface Translations {
   box_saving: string;
   box_save: string;
   box_cancel: string;
+  box_delete: string;
+  box_deleteConfirmTitle: string;
+  box_deleteConfirmMessage: string;
+  box_deleteConfirm: string;
 
   // AddEditItemScreen
   item_permissionTitle: string;
@@ -68,6 +72,10 @@ export interface Translations {
   item_boxRequired: string;
   item_save: string;
   item_cancel: string;
+  item_delete: string;
+  item_deleteConfirmTitle: string;
+  item_deleteConfirmMessage: string;
+  item_deleteConfirm: string;
 }
 
 export const translations: Record<Locale, Translations> = {
@@ -108,6 +116,10 @@ export const translations: Record<Locale, Translations> = {
     box_saving: 'Saving…',
     box_save: 'Save Box',
     box_cancel: 'Cancel',
+    box_delete: 'Delete Box',
+    box_deleteConfirmTitle: 'Delete Box',
+    box_deleteConfirmMessage: 'This will permanently delete the box and all its items. This cannot be undone.',
+    box_deleteConfirm: 'Delete',
 
     item_permissionTitle: 'Permission needed',
     item_permissionMessage: 'Allow access to your photo library to add a photo.',
@@ -128,6 +140,10 @@ export const translations: Record<Locale, Translations> = {
     item_boxRequired: 'A box is required.',
     item_save: 'Save',
     item_cancel: 'Cancel',
+    item_delete: 'Delete Item',
+    item_deleteConfirmTitle: 'Delete Item',
+    item_deleteConfirmMessage: 'This will permanently delete the item. This cannot be undone.',
+    item_deleteConfirm: 'Delete',
   },
 
   de: {
@@ -167,6 +183,10 @@ export const translations: Record<Locale, Translations> = {
     box_saving: 'Speichern…',
     box_save: 'Box speichern',
     box_cancel: 'Abbrechen',
+    box_delete: 'Box löschen',
+    box_deleteConfirmTitle: 'Box löschen',
+    box_deleteConfirmMessage: 'Die Box und alle enthaltenen Artikel werden dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.',
+    box_deleteConfirm: 'Löschen',
 
     item_permissionTitle: 'Zugriff benötigt',
     item_permissionMessage: 'Bitte Fotobibliothek-Zugriff erlauben, um ein Foto hinzuzufügen.',
@@ -187,5 +207,9 @@ export const translations: Record<Locale, Translations> = {
     item_boxRequired: 'Eine Box ist erforderlich.',
     item_save: 'Speichern',
     item_cancel: 'Abbrechen',
+    item_delete: 'Artikel löschen',
+    item_deleteConfirmTitle: 'Artikel löschen',
+    item_deleteConfirmMessage: 'Der Artikel wird dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.',
+    item_deleteConfirm: 'Löschen',
   },
 };
