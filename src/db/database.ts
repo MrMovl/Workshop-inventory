@@ -135,6 +135,27 @@ export async function deleteItem(db: SQLiteDatabase, id: number): Promise<void> 
   await db.runAsync('DELETE FROM items WHERE id = ?', id);
 }
 
+export async function getRecentAll(
+  db: SQLiteDatabase,
+  includeBoxes: boolean,
+  limit: number,
+): Promise<{ type: 'box' | 'item'; id: number; name: string; description: string }[]> {
+  if (includeBoxes) {
+    return db.getAllAsync(
+      `SELECT type, id, name, description FROM (
+         SELECT 'item' AS type, id, name, COALESCE(description, '') AS description, createdAt FROM items
+         UNION ALL
+         SELECT 'box' AS type, id, name, COALESCE(description, '') AS description, createdAt FROM boxes
+       ) ORDER BY createdAt DESC LIMIT ?`,
+      limit,
+    );
+  }
+  return db.getAllAsync(
+    `SELECT 'item' AS type, id, name, COALESCE(description, '') AS description FROM items ORDER BY createdAt DESC LIMIT ?`,
+    limit,
+  );
+}
+
 export async function searchAll(
   db: SQLiteDatabase,
   query: string,
