@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { colors } from '../theme';
 import HomeScreen from '../screens/HomeScreen';
 import BoxListScreen from '../screens/BoxListScreen';
 import BoxDetailScreen from '../screens/BoxDetailScreen';
@@ -17,8 +18,17 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'My Workshop' }} />
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: colors.paper },
+        headerTintColor: colors.ink,
+        headerTitleStyle: { fontSize: 17, letterSpacing: -0.2, fontWeight: '600' },
+        headerShadowVisible: false,
+        headerLargeTitle: false,
+        contentStyle: { backgroundColor: colors.paper },
+      }}
+    >
+      <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="BoxList" component={BoxListScreen} options={{ title: 'Boxes' }} />
       <Stack.Screen
         name="BoxDetail"

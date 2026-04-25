@@ -1,0 +1,1432 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Workshop Inventory — Visual Direction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* — Tokens — */
+    --paper:        #f4efe6;   /* warm paper, oklch(0.945 0.014 80) */
+    --paper-2:      #ece5d7;   /* card surface, slightly deeper */
+    --paper-3:      #e2d9c6;   /* hairline */
+    --ink:          #1c1a16;   /* primary text */
+    --ink-2:        #4a443b;   /* secondary text */
+    --ink-3:        #8a8071;   /* tertiary / placeholder */
+    --line:         #d6cdb9;   /* borders */
+    --line-soft:    #e6dec9;
+    --accent:       #b6651e;   /* cedar-amber, oklch(0.58 0.13 55) */
+    --accent-ink:   #fff8ef;
+    --accent-soft:  #f3e6d0;
+    --danger:       #a83a25;
+    --ok:           #4d6a3b;
+
+    /* category palette restated in oklch — equal chroma, varied hue */
+    --cat-1:  oklch(0.62 0.13  35);  /* tomato   */
+    --cat-2:  oklch(0.66 0.13  55);  /* amber    */
+    --cat-3:  oklch(0.72 0.12  85);  /* mustard  */
+    --cat-4:  oklch(0.76 0.12 110);  /* citron   */
+    --cat-5:  oklch(0.62 0.12 145);  /* moss     */
+    --cat-6:  oklch(0.60 0.10 180);  /* teal     */
+    --cat-7:  oklch(0.55 0.11 230);  /* steel    */
+    --cat-8:  oklch(0.50 0.13 270);  /* indigo   */
+    --cat-9:  oklch(0.55 0.13 320);  /* plum     */
+    --cat-10: oklch(0.55 0.10 015);  /* brick    */
+    --cat-11: oklch(0.45 0.04  60);  /* walnut   */
+    --cat-12: oklch(0.50 0.02 230);  /* slate    */
+
+    --r-sm:  6px;
+    --r-md:  10px;
+    --r-lg:  14px;
+    --r-pill: 999px;
+
+    --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px;
+    --s-5: 20px; --s-6: 24px; --s-7: 32px; --s-8: 48px;
+
+    --shadow-1: 0 1px 0 rgba(28,26,22,0.04), 0 2px 8px rgba(28,26,22,0.06);
+    --shadow-2: 0 1px 0 rgba(28,26,22,0.04), 0 8px 24px rgba(28,26,22,0.10);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+  /* — Page chrome — */
+  header.cover {
+    padding: 64px 48px 40px;
+    border-bottom: 1px solid var(--line);
+    background: var(--paper-2);
+  }
+  header.cover .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  header.cover h1 {
+    font-size: 44px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 8px 0 4px;
+  }
+  header.cover p {
+    color: var(--ink-2);
+    margin: 0;
+    max-width: 60ch;
+  }
+  header.cover .meta {
+    margin-top: 24px;
+    display: flex;
+    gap: 28px;
+    color: var(--ink-2);
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  header.cover .meta b { color: var(--ink); font-weight: 500; }
+
+  section.block {
+    padding: 56px 48px;
+    border-bottom: 1px solid var(--line);
+  }
+  section.block > .lede {
+    max-width: 60ch;
+    margin-bottom: 32px;
+  }
+  section.block > .lede h2 {
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-3);
+    font-weight: 500;
+    margin: 0 0 8px;
+  }
+  section.block > .lede h3 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin: 0 0 8px;
+  }
+  section.block > .lede p {
+    color: var(--ink-2);
+    margin: 0;
+  }
+
+  /* — Token grid — */
+  .grid {
+    display: grid;
+    gap: 24px;
+  }
+  .grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid.cols-12 { grid-template-columns: repeat(12, 1fr); gap: 12px; }
+
+  .swatch {
+    border-radius: var(--r-md);
+    overflow: hidden;
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+  }
+  .swatch .chip { height: 88px; }
+  .swatch .meta {
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .swatch .name { font-weight: 500; font-size: 14px; }
+  .swatch .hex { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-3); }
+
+  .cat-swatch { border-radius: var(--r-md); border: 1px solid var(--line); overflow: hidden; }
+  .cat-swatch .chip { height: 56px; }
+  .cat-swatch .meta { padding: 8px 10px; font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--ink-2); display:flex; justify-content: space-between;}
+
+  .type-row {
+    border-top: 1px solid var(--line-soft);
+    padding: 18px 0;
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    align-items: baseline;
+    gap: 24px;
+  }
+  .type-row:first-child { border-top: 0; }
+  .type-row .key { color: var(--ink-3); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .type-row .key b { color: var(--ink); font-weight: 500; display:block; margin-bottom: 2px; font-family: 'Inter', sans-serif; font-size: 13px;}
+  .type-row .val { color: var(--ink); }
+
+  .space-row {
+    display: flex; align-items: center; gap: 16px;
+    padding: 10px 0;
+    border-top: 1px solid var(--line-soft);
+  }
+  .space-row:first-child { border-top: 0; }
+  .space-row .bar { background: var(--accent); height: 14px; border-radius: 2px;}
+  .space-row .lbl { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-2); width: 80px; }
+
+  /* — Phone mockup — */
+  .phones {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(320px, 380px));
+    gap: 32px;
+    align-items: start;
+  }
+  .phones.three { grid-template-columns: repeat(3, minmax(300px, 360px)); }
+
+  .phone-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .phone-label .tag {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2px 8px;
+    border-radius: var(--r-pill);
+    letter-spacing: 0.08em;
+  }
+  .phone-label .tag.after {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  .phone {
+    width: 100%;
+    aspect-ratio: 9 / 19.5;
+    background: #0d0c0a;
+    border-radius: 38px;
+    padding: 8px;
+    box-shadow: var(--shadow-2);
+    position: relative;
+  }
+  .phone .screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 30px;
+    overflow: hidden;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .statusbar {
+    height: 28px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .statusbar .dots { display: flex; gap: 3px; }
+  .statusbar .dots i { width: 4px; height: 4px; border-radius:50%; background: currentColor; opacity: .7; display:inline-block;}
+
+  /* — BEFORE phone (Material-ish baseline) — */
+  .before .screen { background: #fff; color: #111; font-family: 'Roboto', 'Inter', sans-serif; }
+  .before .appbar {
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 16px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #1a1a1a;
+  }
+  .before .body { padding: 16px; flex:1; overflow:hidden; display:flex; flex-direction:column; gap: 4px;}
+  .before .row { display: flex; gap: 12px; }
+  .before .btn-blue {
+    flex: 1;
+    background: #1a73e8;
+    color: #fff;
+    border-radius: 8px;
+    padding: 14px 0;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .before .input {
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 15px;
+    color: #111;
+    margin-top: 4px;
+  }
+  .before .input.ph { color: #888; }
+  .before .label { font-size: 13px; font-weight: 600; color: #444; margin-top: 12px; }
+  .before .checkbox {
+    display: flex; align-items: center; gap: 8px; margin-top: 10px;
+    font-size: 13px; color: #444;
+  }
+  .before .checkbox .box {
+    width: 18px; height: 18px; border-radius: 4px; background: #1a73e8;
+    color: #fff; display:flex; align-items:center; justify-content:center;
+    font-size: 11px; font-weight: 700;
+  }
+  .before .chip {
+    border: 2px solid #ccc; border-radius: 16px;
+    padding: 6px 12px; font-size: 13px; color: #444;
+    display: inline-block;
+  }
+  .before .chip.sel { background: #43a047; border-color: #43a047; color:#fff; }
+  .before .chip.dash { border: 2px dashed #1a73e8; color: #1a73e8;}
+  .before .chiprow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;}
+
+  /* — AFTER phone (Workbench design) — */
+  .after .screen {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+  }
+  .after .statusbar { color: var(--ink); }
+  .after .appbar {
+    background: var(--paper);
+    padding: 14px 20px 16px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+  .after .appbar .title {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .after .appbar .crumb {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-3);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .after .appbar .back {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-2);
+    margin-bottom: 6px;
+  }
+  .after .body { padding: 16px 20px 20px; flex: 1; overflow: hidden; display: flex; flex-direction: column; gap: 12px;}
+
+  .after .btn-row { display: flex; gap: 10px; }
+  .after .btn {
+    flex: 1;
+    border-radius: var(--r-md);
+    padding: 14px 0;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    cursor: pointer;
+  }
+  .after .btn.primary {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .after .btn.secondary {
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+  .after .btn.accent {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .after .btn.ghost {
+    background: transparent;
+    color: var(--ink-2);
+    border: 1px solid var(--line);
+  }
+  .after .btn .glyph { margin-right: 6px; opacity: .85; font-weight: 500;}
+
+  .after .field {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .after .field .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .after .field .lbl .req { color: var(--accent); margin-left: 2px;}
+  .after .field .lbl .count { float: right; opacity: 0.7; }
+  .after .input {
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 12px 14px;
+    font-size: 16px;
+    color: var(--ink);
+    font-family: inherit;
+  }
+  .after .input.ph { color: var(--ink-3); }
+  .after .input.focus {
+    background: #fff;
+    border-color: var(--ink);
+    box-shadow: 0 0 0 3px rgba(28,26,22,0.06);
+  }
+  .after .textarea { min-height: 76px; }
+  .after .input.amount { width: 96px; }
+
+  .after .search {
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 12px 14px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 15px;
+    color: var(--ink-3);
+  }
+  .after .search .icon {
+    width: 14px; height: 14px; border: 1.5px solid var(--ink-3); border-radius: 50%;
+    position: relative;
+  }
+  .after .search .icon::after {
+    content:''; position: absolute; right: -5px; bottom: -5px; width: 7px; height: 1.5px;
+    background: var(--ink-3); transform: rotate(45deg); border-radius: 1px;
+  }
+
+  .after .toggle {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; color: var(--ink-2);
+    padding: 4px 0;
+  }
+  .after .toggle .box {
+    width: 18px; height: 18px; border-radius: 4px;
+    border: 1.5px solid var(--ink); background: var(--ink);
+    color: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600;
+  }
+
+  .after .resultlist {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    overflow: hidden;
+  }
+  .after .resultlist .row {
+    padding: 12px 14px;
+    border-top: 1px solid var(--line-soft);
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .after .resultlist .row:first-child { border-top: 0; }
+  .after .resultlist .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    padding: 3px 6px 2px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+  .after .resultlist .badge.item { background: var(--ink); color: var(--paper); }
+  .after .resultlist .badge.box { background: transparent; color: var(--ink-2); border: 1px solid var(--line); }
+  .after .resultlist .name { font-size: 14px; font-weight: 500; }
+  .after .resultlist .desc { font-size: 12px; color: var(--ink-3); }
+
+  .after .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-pill);
+    font-size: 13px;
+    color: var(--ink-2);
+    background: var(--paper);
+  }
+  .after .chip .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .after .chip.sel {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .after .chip.new {
+    border-style: dashed;
+    color: var(--ink-2);
+  }
+  .after .chiprow { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .after .photo-tile {
+    height: 120px;
+    border: 1px dashed var(--line);
+    border-radius: var(--r-md);
+    background:
+      repeating-linear-gradient(45deg, transparent 0 7px, rgba(28,26,22,0.04) 7px 8px),
+      var(--paper-2);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 4px;
+    color: var(--ink-3);
+    font-size: 13px;
+  }
+  .after .photo-tile .ico {
+    width: 22px; height: 22px;
+    border: 1.5px solid var(--ink-3);
+    border-radius: 4px;
+    position: relative;
+  }
+  .after .photo-tile .ico::before {
+    content: ''; position: absolute; left: 3px; bottom: 3px; right: 6px; height: 5px;
+    background: var(--ink-3); border-radius: 1px;
+  }
+  .after .photo-tile .ico::after {
+    content: ''; position: absolute; right: 4px; top: 4px; width: 4px; height: 4px;
+    background: var(--ink-3); border-radius: 50%;
+  }
+
+  .after .picked-box {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: var(--r-md);
+  }
+  .after .picked-box .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .after .picked-box .name { flex: 1; font-weight: 500; }
+  .after .picked-box .x { color: var(--accent); font-size: 18px; line-height: 1; }
+
+  .after .swatchgrid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  .after .swatchgrid .sw {
+    aspect-ratio: 1/1; border-radius: 50%;
+  }
+  .after .swatchgrid .sw.sel {
+    box-shadow: 0 0 0 2px var(--paper-2), 0 0 0 4px var(--ink);
+  }
+
+  .after .savebtn {
+    margin-top: 8px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-radius: var(--r-md);
+    padding: 14px 0;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .after .cancelbtn {
+    background: transparent;
+    color: var(--ink-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 14px 0;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  /* — Component spec strip — */
+  .component-row {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 28px;
+    padding: 24px 0;
+    border-top: 1px solid var(--line-soft);
+    align-items: start;
+  }
+  .component-row:first-child { border-top: 0; }
+  .component-row .meta .name {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .component-row .meta .desc {
+    color: var(--ink-2);
+    font-size: 13px;
+    margin-top: 4px;
+  }
+  .component-row .meta code,
+  .component-row .meta .mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    display: block;
+    margin-top: 6px;
+  }
+  .component-row .demo {
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+
+  /* shared button styles for spec demos */
+  .ui-btn {
+    border-radius: var(--r-md);
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    font-family: inherit;
+  }
+  .ui-btn.primary { background: var(--ink); color: var(--paper); }
+  .ui-btn.accent { background: var(--accent); color: var(--accent-ink); }
+  .ui-btn.secondary { background: var(--paper); color: var(--ink); border-color: var(--line); }
+  .ui-btn.ghost { background: transparent; color: var(--ink-2); border-color: var(--line); }
+  .ui-btn.danger { background: transparent; color: var(--danger); border-color: var(--danger); }
+
+  .ui-input {
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 12px 14px;
+    font-size: 15px;
+    font-family: inherit;
+    width: 220px;
+    color: var(--ink);
+  }
+  .ui-input::placeholder { color: var(--ink-3); }
+
+  .ui-chip {
+    display: inline-flex; gap: 6px; align-items: center;
+    padding: 7px 12px; border: 1px solid var(--line); border-radius: var(--r-pill);
+    font-size: 13px; color: var(--ink-2); background: var(--paper);
+  }
+  .ui-chip .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .ui-chip.sel { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* — Handoff doc — */
+  .handoff {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 32px;
+  }
+  .handoff nav { position: sticky; top: 24px; align-self: start;}
+  .handoff nav h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 500;
+    margin: 0 0 10px;
+  }
+  .handoff nav a {
+    display: block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: var(--ink-2);
+    text-decoration: none;
+    font-size: 13px;
+  }
+  .handoff nav a:hover { background: var(--paper-2); color: var(--ink); }
+
+  .doc h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    border-bottom: 0;
+    border-radius: var(--r-md) var(--r-md) 0 0;
+    padding: 10px 14px;
+    margin: 32px 0 0;
+    font-weight: 500;
+  }
+  .doc h4:first-child { margin-top: 0; }
+  .doc h4 .pill {
+    float: right;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 10px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    padding: 2px 8px;
+    border-radius: var(--r-pill);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .doc h4 .pill.touch { background: var(--ink); }
+  .doc h4 .pill.new { background: var(--ok); color: #fff; }
+  .doc pre {
+    background: #1c1a16;
+    color: #e8e2d3;
+    border-radius: 0 0 var(--r-md) var(--r-md);
+    padding: 18px 18px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.55;
+    margin: 0;
+  }
+  .doc pre .add  { color: #b9d986; background: rgba(120,160,80,0.18); display: block; }
+  .doc pre .del  { color: #d99986; background: rgba(180,80,60,0.18); text-decoration: line-through; opacity: 0.85; display: block; }
+  .doc pre .hl   { color: #f3c177; }
+  .doc pre .cmt  { color: #8a8071; }
+  .doc pre .meta { color: #f3c177; }
+
+  .doc p { color: var(--ink-2); }
+  .doc .callout {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 14px 16px;
+    border-radius: 0 var(--r-md) var(--r-md) 0;
+    margin: 24px 0;
+    color: var(--ink);
+    font-size: 14px;
+  }
+  .doc .callout b { font-weight: 600; }
+  .doc ul { color: var(--ink-2); }
+
+  footer {
+    padding: 40px 48px 56px;
+    color: var(--ink-3);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    text-align: center;
+    border-top: 1px solid var(--line);
+  }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="eyebrow">Visual direction · v1</div>
+  <h1>Workshop Inventory</h1>
+  <p>A quiet, warm visual system for a tool that lives in a workshop. Paper neutrals, deep ink, one cedar-amber accent. Designed as a drop-in restyle — the same screens, the same components, just dressed for the bench.</p>
+  <div class="meta">
+    <div><b>Stack</b> · Expo · React Native · TS</div>
+    <div><b>Surfaces</b> · Home · Box · Item</div>
+    <div><b>Risk</b> · Style-only — no behavior change</div>
+  </div>
+</header>
+
+<!-- ========== TOKENS ========== -->
+<section class="block" id="tokens">
+  <div class="lede">
+    <h2>01 — Tokens</h2>
+    <h3>The whole system in one screen</h3>
+    <p>Every value below is a single source of truth. Drop these into a <span class="mono">src/theme.ts</span> module and import them everywhere. No raw hex or magic numbers in screen files.</p>
+  </div>
+
+  <h4 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:500;margin:0 0 14px;">Surfaces &amp; Ink</h4>
+  <div class="grid cols-3" style="margin-bottom:40px;">
+    <div class="swatch"><div class="chip" style="background:var(--paper);"></div><div class="meta"><span class="name">paper</span><span class="hex">#F4EFE6</span></div></div>
+    <div class="swatch"><div class="chip" style="background:var(--paper-2);"></div><div class="meta"><span class="name">paper.2 — card</span><span class="hex">#ECE5D7</span></div></div>
+    <div class="swatch"><div class="chip" style="background:var(--paper-3);"></div><div class="meta"><span class="name">paper.3 — depth</span><span class="hex">#E2D9C6</span></div></div>
+    <div class="swatch"><div class="chip" style="background:var(--ink);"></div><div class="meta"><span class="name" style="color:var(--paper);position:relative;z-index:1">ink</span><span class="hex">#1C1A16</span></div></div>
+    <div class="swatch"><div class="chip" style="background:var(--ink-2);"></div><div class="meta"><span class="name">ink.2 — label</span><span class="hex">#4A443B</span></div></div>
+    <div class="swatch"><div class="chip" style="background:var(--ink-3);"></div><div class="meta"><span class="name">ink.3 — placeholder</span><span class="hex">#8A8071</span></div></div>
+  </div>
+
+  <h4 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:500;margin:0 0 14px;">Accent &amp; State</h4>
+  <div class="grid cols-3" style="margin-bottom:40px;">
+    <div class="swatch"><div class="chip" style="background:var(--accent);"></div><div class="meta"><span class="name">accent — cedar</span><span class="hex">#B6651E</span></div></div>
+    <div class="swatch"><div class="chip" style="background:var(--accent-soft);"></div><div class="meta"><span class="name">accent.soft</span><span class="hex">#F3E6D0</span></div></div>
+    <div class="swatch"><div class="chip" style="background:var(--danger);"></div><div class="meta"><span class="name">danger</span><span class="hex">#A83A25</span></div></div>
+  </div>
+
+  <h4 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:500;margin:0 0 14px;">Category palette — restated in OKLCH</h4>
+  <div class="grid cols-12" style="margin-bottom:40px;">
+    <div class="cat-swatch"><div class="chip" style="background:var(--cat-1);"></div><div class="meta"><span>tomato</span><span>01</span></div></div>
+    <div class="cat-swatch"><div class="chip" style="background:var(--cat-2);"></div><div class="meta"><span>amber</span><span>02</span></div></div>
+    <div class="cat-swatch"><div class="chip" style="background:var(--cat-3);"></div><div class="meta"><span>mustard</span><span>03</span></div></div>
+    <div class="cat-swatch"><div class="chip" style="background:var(--cat-4);"></div><div class="meta"><span>citron</span><span>04</span></div></div>
+    <div class="cat-swatch"><div class="chip" style="background:var(--cat-5);"></div><div class="meta"><span>moss</span><span>05</span></div></div>
+    <div class="cat-swatch"><div class="chip" style="background:var(--cat-6);"></div><div class="meta"><span>teal</span><span>06</span></div></div>
+    <div class="cat-swatch"><div class="chip" style="background:var(--cat-7);"></div><div class="meta"><span>steel</span><span>07</span></div></div>
+    <div class="cat-swatch"><div class="chip" style="background:var(--cat-8);"></div><div class="meta"><span>indigo</span><span>08</span></div></div>
+    <div class="cat-swatch"><div class="chip" style="background:var(--cat-9);"></div><div class="meta"><span>plum</span><span>09</span></div></div>
+    <div class="cat-swatch"><div class="chip" style="background:var(--cat-10);"></div><div class="meta"><span>brick</span><span>10</span></div></div>
+    <div class="cat-swatch"><div class="chip" style="background:var(--cat-11);"></div><div class="meta"><span>walnut</span><span>11</span></div></div>
+    <div class="cat-swatch"><div class="chip" style="background:var(--cat-12);"></div><div class="meta"><span>slate</span><span>12</span></div></div>
+  </div>
+
+  <div class="grid cols-2">
+    <div>
+      <h4 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:500;margin:0 0 14px;">Type — Inter + JetBrains Mono</h4>
+      <div class="type-row">
+        <div class="key"><b>display</b>28 / 600 / -1.5%</div>
+        <div class="val" style="font-size:28px;font-weight:600;letter-spacing:-0.015em;line-height:1.15;">My Workshop</div>
+      </div>
+      <div class="type-row">
+        <div class="key"><b>title</b>22 / 600 / -1%</div>
+        <div class="val" style="font-size:22px;font-weight:600;letter-spacing:-0.01em;">Green Plastic Box 1</div>
+      </div>
+      <div class="type-row">
+        <div class="key"><b>body</b>16 / 400</div>
+        <div class="val" style="font-size:16px;">Wood screws M4×20, approx. 200 left.</div>
+      </div>
+      <div class="type-row">
+        <div class="key"><b>label</b>10 / 500 / +12% / mono</div>
+        <div class="val mono" style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-3);">Description</div>
+      </div>
+      <div class="type-row">
+        <div class="key"><b>caption</b>12 / 400 / mono</div>
+        <div class="val mono" style="font-size:12px;color:var(--ink-3);">23 / 500</div>
+      </div>
+    </div>
+    <div>
+      <h4 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:500;margin:0 0 14px;">Spacing &amp; radius</h4>
+      <div class="space-row"><span class="lbl">s1 · 4</span><span class="bar" style="width:4px;"></span></div>
+      <div class="space-row"><span class="lbl">s2 · 8</span><span class="bar" style="width:8px;"></span></div>
+      <div class="space-row"><span class="lbl">s3 · 12</span><span class="bar" style="width:12px;"></span></div>
+      <div class="space-row"><span class="lbl">s4 · 16</span><span class="bar" style="width:16px;"></span></div>
+      <div class="space-row"><span class="lbl">s5 · 20</span><span class="bar" style="width:20px;"></span></div>
+      <div class="space-row"><span class="lbl">s6 · 24</span><span class="bar" style="width:24px;"></span></div>
+      <div class="space-row"><span class="lbl">s7 · 32</span><span class="bar" style="width:32px;"></span></div>
+      <div class="space-row"><span class="lbl">s8 · 48</span><span class="bar" style="width:48px;"></span></div>
+
+      <div style="margin-top:24px; display:flex; gap:14px; align-items:center;">
+        <div style="width:40px;height:40px;background:var(--paper-2);border:1px solid var(--line);border-radius:6px;"></div>
+        <div style="width:40px;height:40px;background:var(--paper-2);border:1px solid var(--line);border-radius:10px;"></div>
+        <div style="width:40px;height:40px;background:var(--paper-2);border:1px solid var(--line);border-radius:14px;"></div>
+        <div style="width:40px;height:40px;background:var(--paper-2);border:1px solid var(--line);border-radius:999px;"></div>
+        <div class="mono" style="font-size:11px;color:var(--ink-3);">6 · 10 · 14 · pill</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== COMPONENTS ========== -->
+<section class="block" id="components">
+  <div class="lede">
+    <h2>02 — Components</h2>
+    <h3>What changed, atom by atom</h3>
+    <p>Same set of primitives the app already uses, restyled. Sizes are calibrated to a 48px primary touch target.</p>
+  </div>
+
+  <div class="component-row">
+    <div class="meta">
+      <div class="name">Button — primary</div>
+      <div class="desc">Ink fill on paper. The default action across the app.</div>
+      <code>bg: ink · color: paper · radius: 10 · pad: 14×20 · weight: 600</code>
+    </div>
+    <div class="demo">
+      <button class="ui-btn primary">Save Box</button>
+      <button class="ui-btn accent">Save Item</button>
+      <button class="ui-btn secondary">Add Box</button>
+      <button class="ui-btn ghost">Cancel</button>
+      <button class="ui-btn danger">Remove</button>
+    </div>
+  </div>
+
+  <div class="component-row">
+    <div class="meta">
+      <div class="name">Input</div>
+      <div class="desc">Recessed paper.2 well, 1px line border, ink text. Focus ring is ink at 6% over ink border.</div>
+      <code>bg: paper.2 · border: line · radius: 10 · pad: 12×14 · font: 16</code>
+    </div>
+    <div class="demo">
+      <input class="ui-input" placeholder="e.g. Green Plastic Box 1" />
+      <input class="ui-input" value="Green Plastic Box 1" />
+    </div>
+  </div>
+
+  <div class="component-row">
+    <div class="meta">
+      <div class="name">Chip</div>
+      <div class="desc">Single border, pill radius. Selected state goes ink-on-paper, not category-color, so the dot stays the only color cue.</div>
+      <code>border: line · radius: 999 · pad: 7×12 · font: 13</code>
+    </div>
+    <div class="demo">
+      <span class="ui-chip"><span class="dot" style="background:var(--cat-2)"></span>Hand tools</span>
+      <span class="ui-chip sel"><span class="dot" style="background:var(--cat-5)"></span>Fasteners</span>
+      <span class="ui-chip"><span class="dot" style="background:var(--cat-7)"></span>Electronics</span>
+      <span class="ui-chip" style="border-style:dashed">+ New</span>
+    </div>
+  </div>
+
+  <div class="component-row">
+    <div class="meta">
+      <div class="name">Label</div>
+      <div class="desc">Mono micro-caps. Replaces the bold sentence-case labels — quieter, more workshop-tag energy.</div>
+      <code>font: JetBrains Mono 10 / +12% / uppercase · color: ink.3</code>
+    </div>
+    <div class="demo">
+      <span class="mono" style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);">Name <span style="color:var(--accent)">*</span></span>
+      <span class="mono" style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);">Description</span>
+      <span class="mono" style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);">Category</span>
+    </div>
+  </div>
+
+  <div class="component-row">
+    <div class="meta">
+      <div class="name">Badge — search result type</div>
+      <div class="desc">Items get the filled ink badge (you'll click them often); boxes get the outline.</div>
+      <code>font: mono 9.5 / +10% · pad: 3×6 · radius: 3</code>
+    </div>
+    <div class="demo">
+      <span class="mono" style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:3px 6px;border-radius:3px;">Item</span>
+      <span class="mono" style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);color:var(--ink-2);padding:3px 6px;border-radius:3px;">Box</span>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SCREENS ========== -->
+<section class="block" id="screens">
+  <div class="lede">
+    <h2>03 — Screens</h2>
+    <h3>Before / After — three surfaces</h3>
+    <p>Left: what's shipping today (the Material baseline). Right: same screen restyled. No layout reflows except where current spacing was tight.</p>
+  </div>
+
+  <!-- Home -->
+  <h4 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:500;margin:0 0 14px;">Home — search &amp; entry</h4>
+  <div class="phones" style="margin-bottom:48px;">
+    <!-- BEFORE -->
+    <div class="before">
+      <div class="phone-label"><span>HomeScreen.tsx</span><span class="tag">Before</span></div>
+      <div class="phone"><div class="screen">
+        <div class="statusbar"><span>9:30</span><span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="appbar">My Workshop</div>
+        <div class="body">
+          <div class="row">
+            <div class="btn-blue">Add Box</div>
+            <div class="btn-blue">Add Item</div>
+          </div>
+          <div class="input ph" style="margin-top:16px;">Search items and boxes…</div>
+          <div class="checkbox"><div class="box">✓</div>Include boxes in search</div>
+          <div style="border:1px solid #ccc;border-radius:8px;margin-top:12px;background:#fff;overflow:hidden;">
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:12px;border-bottom:1px solid #eee;">
+              <span style="background:#1a73e8;color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;">Item</span>
+              <div><div style="font-size:14px;font-weight:500;">Wood screws M4×20</div><div style="font-size:12px;color:#666;">Approx. 200 left, bought 2024</div></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:12px;border-bottom:1px solid #eee;">
+              <span style="background:#888;color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;">Box</span>
+              <div><div style="font-size:14px;font-weight:500;">Green Plastic Box 1</div><div style="font-size:12px;color:#666;">Workbench shelf, top row</div></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:12px;">
+              <span style="background:#1a73e8;color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;">Item</span>
+              <div><div style="font-size:14px;font-weight:500;">3M sandpaper P120</div><div style="font-size:12px;color:#666;">Half a pack</div></div>
+            </div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- AFTER -->
+    <div class="after">
+      <div class="phone-label"><span>HomeScreen.tsx</span><span class="tag after">After</span></div>
+      <div class="phone"><div class="screen">
+        <div class="statusbar"><span>9:30</span><span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="appbar">
+          <div>
+            <div class="crumb">Inventory</div>
+            <div class="title">My Workshop</div>
+          </div>
+          <div class="mono" style="font-size:11px;color:var(--ink-3);">23<span style="color:var(--line)"> / </span>500</div>
+        </div>
+        <div class="body">
+          <div class="search"><span class="icon"></span>Search items and boxes…</div>
+          <div class="toggle"><span class="box">✓</span>Include boxes in search</div>
+
+          <div class="resultlist" style="margin-top:6px;">
+            <div class="row">
+              <span class="badge item">Item</span>
+              <div style="flex:1">
+                <div class="name">Wood screws M4×20</div>
+                <div class="desc">Approx. 200 left, bought 2024</div>
+              </div>
+              <span class="mono" style="font-size:11px;color:var(--ink-3);">200</span>
+            </div>
+            <div class="row">
+              <span class="badge box">Box</span>
+              <div style="flex:1">
+                <div class="name">Green Plastic Box 1</div>
+                <div class="desc">Workbench shelf, top row</div>
+              </div>
+              <span style="width:8px;height:8px;border-radius:50%;background:var(--cat-5);margin-top:8px;"></span>
+            </div>
+            <div class="row">
+              <span class="badge item">Item</span>
+              <div style="flex:1">
+                <div class="name">3M sandpaper P120</div>
+                <div class="desc">Half a pack</div>
+              </div>
+              <span class="mono" style="font-size:11px;color:var(--ink-3);">·5</span>
+            </div>
+            <div class="row">
+              <span class="badge item">Item</span>
+              <div style="flex:1">
+                <div class="name">Hex key set 1.5–10</div>
+                <div class="desc">Tekton — yellow case</div>
+              </div>
+              <span class="mono" style="font-size:11px;color:var(--ink-3);">1</span>
+            </div>
+          </div>
+
+          <div style="flex:1;"></div>
+          <div class="btn-row">
+            <div class="btn secondary"><span class="glyph">+</span>New Box</div>
+            <div class="btn primary"><span class="glyph" style="color:var(--paper)">+</span>New Item</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Box -->
+  <h4 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:500;margin:0 0 14px;">Add / Edit Box</h4>
+  <div class="phones" style="margin-bottom:48px;">
+    <div class="before">
+      <div class="phone-label"><span>AddEditBoxScreen.tsx</span><span class="tag">Before</span></div>
+      <div class="phone"><div class="screen">
+        <div class="statusbar"><span>9:30</span><span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="appbar">New Box</div>
+        <div class="body">
+          <div class="label">Name *</div>
+          <div class="input">Green Plastic Box 1</div>
+          <div style="font-size:11px;color:#888;text-align:right;">21/100</div>
+          <div class="label">Description</div>
+          <div class="input ph" style="height:60px;">Optional details…</div>
+          <div class="label">Category</div>
+          <div class="chiprow">
+            <span class="chip">Hand tools</span>
+            <span class="chip sel">Fasteners</span>
+            <span class="chip">Electronics</span>
+            <span class="chip dash">+ New</span>
+          </div>
+          <div style="flex:1;"></div>
+          <div class="btn-blue" style="margin-top:14px;">Save Box</div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="after">
+      <div class="phone-label"><span>AddEditBoxScreen.tsx</span><span class="tag after">After</span></div>
+      <div class="phone"><div class="screen">
+        <div class="statusbar"><span>9:30</span><span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="appbar">
+          <div>
+            <div class="back">‹ My Workshop</div>
+            <div class="title">New Box</div>
+          </div>
+        </div>
+        <div class="body">
+          <div class="field">
+            <div class="lbl">Name <span class="req">*</span><span class="count">21 / 100</span></div>
+            <div class="input focus">Green Plastic Box 1</div>
+          </div>
+          <div class="field">
+            <div class="lbl">Description<span class="count">0 / 500</span></div>
+            <div class="input textarea ph">Optional details…</div>
+          </div>
+          <div class="field">
+            <div class="lbl">Category</div>
+            <div class="chiprow">
+              <span class="chip"><span class="dot" style="background:var(--cat-2)"></span>Hand tools</span>
+              <span class="chip sel"><span class="dot" style="background:var(--cat-5)"></span>Fasteners</span>
+              <span class="chip"><span class="dot" style="background:var(--cat-7)"></span>Electronics</span>
+              <span class="chip new">+ New</span>
+            </div>
+          </div>
+          <div style="flex:1;"></div>
+          <div class="savebtn">Save Box</div>
+          <div class="cancelbtn">Cancel</div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Item -->
+  <h4 style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:500;margin:0 0 14px;">Add / Edit Item</h4>
+  <div class="phones" style="margin-bottom:24px;">
+    <div class="before">
+      <div class="phone-label"><span>AddEditItemScreen.tsx</span><span class="tag">Before</span></div>
+      <div class="phone"><div class="screen">
+        <div class="statusbar"><span>9:30</span><span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="appbar">New Item</div>
+        <div class="body">
+          <div class="label">Name *</div>
+          <div class="input">Wood screws M4×20</div>
+          <div class="label">Description</div>
+          <div class="input ph" style="height:50px;">Any extra detail…</div>
+          <div class="label">Amount *</div>
+          <div class="input" style="width:80px;">200</div>
+          <div class="label">Photo</div>
+          <div style="border:1px solid #1a73e8;color:#1a73e8;border-radius:8px;text-align:center;padding:10px;font-size:14px;font-weight:600;">Add Photo</div>
+          <div class="label">Box *</div>
+          <div style="border:1px solid #1a73e8;background:#e8f0fe;border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;">
+            <span>Green Plastic Box 1</span><span style="color:#1a73e8;">×</span>
+          </div>
+          <div style="flex:1;"></div>
+          <div class="btn-blue" style="margin-top:14px;">Save</div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="after">
+      <div class="phone-label"><span>AddEditItemScreen.tsx</span><span class="tag after">After</span></div>
+      <div class="phone"><div class="screen">
+        <div class="statusbar"><span>9:30</span><span class="dots"><i></i><i></i><i></i></span></div>
+        <div class="appbar">
+          <div>
+            <div class="back">‹ My Workshop</div>
+            <div class="title">New Item</div>
+          </div>
+        </div>
+        <div class="body">
+          <div class="field">
+            <div class="lbl">Name <span class="req">*</span></div>
+            <div class="input">Wood screws M4×20</div>
+          </div>
+          <div class="field">
+            <div class="lbl">Description</div>
+            <div class="input textarea ph">Any extra detail…</div>
+          </div>
+          <div style="display:flex; gap:14px; align-items:flex-end;">
+            <div class="field" style="flex:0 0 auto;">
+              <div class="lbl">Amount <span class="req">*</span></div>
+              <div class="input amount mono" style="text-align:right;">200</div>
+            </div>
+            <div class="field" style="flex:1;">
+              <div class="lbl">Photo</div>
+              <div class="photo-tile" style="height:46px;border-style:solid;border-color:var(--line);background:var(--paper-2);flex-direction:row;gap:8px;font-size:13px;color:var(--ink-2);">
+                <span class="ico"></span>Add photo
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <div class="lbl">Box <span class="req">*</span></div>
+            <div class="picked-box">
+              <span class="lbl">In</span>
+              <span class="name">Green Plastic Box 1</span>
+              <span class="x">×</span>
+            </div>
+          </div>
+          <div style="flex:1;"></div>
+          <div class="savebtn">Save Item</div>
+          <div class="cancelbtn">Cancel</div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== HANDOFF ========== -->
+<section class="block" id="handoff">
+  <div class="lede">
+    <h2>04 — Handoff</h2>
+    <h3>Drop-in for Claude Code</h3>
+    <p>One new file (<span class="mono">src/theme.ts</span>), one tweak per existing screen. No dependencies, no behavior changes — only <span class="mono">StyleSheet</span> values are touched. Paste this whole section into Claude Code with: <em>"Apply the visual direction in this doc. Don't change behavior or props."</em></p>
+  </div>
+
+  <div class="handoff">
+    <nav>
+      <h4>Files</h4>
+      <a href="#f-theme">+ src/theme.ts (new)</a>
+      <a href="#f-app">App.tsx</a>
+      <a href="#f-nav">src/navigation/AppNavigator.tsx</a>
+      <a href="#f-home">src/screens/HomeScreen.tsx</a>
+      <a href="#f-box">src/screens/AddEditBoxScreen.tsx</a>
+      <a href="#f-item">src/screens/AddEditItemScreen.tsx</a>
+      <a href="#f-fonts">Fonts (one-time)</a>
+    </nav>
+
+    <div class="doc">
+      <div class="callout">
+        <b>What this is.</b> A pure restyle. Every JSX tree, prop, hook, and nav route stays identical. Only color/font/spacing values change. Safe to ship behind a single PR.
+      </div>
+
+      <h4 id="f-theme">src/theme.ts <span class="pill new">New</span></h4>
+<pre><span class="cmt">// Single source of truth for color, type, spacing, radius.</span>
+<span class="cmt">// Imported by every screen. No raw hex anywhere else.</span>
+
+export const colors = {
+  paper:       '#F4EFE6',  <span class="cmt">// app background</span>
+  paperAlt:    '#ECE5D7',  <span class="cmt">// inputs, cards</span>
+  paperDeep:   '#E2D9C6',  <span class="cmt">// dividers / wells</span>
+  ink:         '#1C1A16',  <span class="cmt">// primary text + primary buttons</span>
+  inkMuted:    '#4A443B',  <span class="cmt">// secondary text</span>
+  inkSubtle:   '#8A8071',  <span class="cmt">// placeholders, captions</span>
+  line:        '#D6CDB9',  <span class="cmt">// borders</span>
+  lineSoft:    '#E6DEC9',
+  accent:      '#B6651E',  <span class="cmt">// the only branded color — primary CTA</span>
+  accentInk:   '#FFF8EF',
+  accentSoft:  '#F3E6D0',  <span class="cmt">// picked-box bg, selected states</span>
+  danger:      '#A83A25',
+  ok:          '#4D6A3B',
+};
+
+<span class="cmt">// Restated category palette — equal chroma, equal lightness across hue.</span>
+<span class="cmt">// Replaces the 12 raw hex values in AddEditBoxScreen's PALETTE const.</span>
+export const categoryPalette = [
+  '#C8553D', <span class="cmt">// tomato</span>
+  '#C0762A', <span class="cmt">// amber</span>
+  '#B8902C', <span class="cmt">// mustard</span>
+  '#9E9E36', <span class="cmt">// citron</span>
+  '#5A8042', <span class="cmt">// moss</span>
+  '#3F8074', <span class="cmt">// teal</span>
+  '#3F6E92', <span class="cmt">// steel</span>
+  '#5C5BA4', <span class="cmt">// indigo</span>
+  '#8A4F8E', <span class="cmt">// plum</span>
+  '#A24A3E', <span class="cmt">// brick</span>
+  '#6D4C41', <span class="cmt">// walnut (kept from original)</span>
+  '#546E7A', <span class="cmt">// slate  (kept from original)</span>
+];
+
+export const radius = { sm: 6, md: 10, lg: 14, pill: 999 };
+export const space  = { 1: 4, 2: 8, 3: 12, 4: 16, 5: 20, 6: 24, 7: 32, 8: 48 };
+
+export const type = {
+  fontUI:   'Inter_400Regular',
+  fontUIMd: 'Inter_500Medium',
+  fontUISb: 'Inter_600SemiBold',
+  fontMono: 'JetBrainsMono_400Regular',
+  display:  { fontFamily: 'Inter_600SemiBold', fontSize: 28, letterSpacing: -0.4, lineHeight: 32 },
+  title:    { fontFamily: 'Inter_600SemiBold', fontSize: 22, letterSpacing: -0.2 },
+  body:     { fontFamily: 'Inter_400Regular',  fontSize: 16 },
+  bodyMd:   { fontFamily: 'Inter_500Medium',   fontSize: 15 },
+  caption:  { fontFamily: 'Inter_400Regular',  fontSize: 13, color: colors.inkMuted },
+  label:    { fontFamily: 'JetBrainsMono_400Regular', fontSize: 10,
+              letterSpacing: 1.2, textTransform: 'uppercase' as const, color: colors.inkSubtle },
+  mono:     { fontFamily: 'JetBrainsMono_400Regular', fontSize: 12, color: colors.inkSubtle },
+};
+</pre>
+
+      <h4 id="f-app">App.tsx <span class="pill">Style</span></h4>
+      <p>Switch the status bar to dark glyphs over the warm paper background.</p>
+<pre><span class="del">  &lt;StatusBar style="auto" /&gt;</span>
+<span class="add">  &lt;StatusBar style="dark" backgroundColor="#F4EFE6" /&gt;</span>
+</pre>
+
+      <h4 id="f-nav">src/navigation/AppNavigator.tsx <span class="pill">Style</span></h4>
+      <p>Apply theme colors to the native stack header so every screen inherits the look.</p>
+<pre><span class="add">import { colors, type } from '../theme';</span>
+
+&lt;Stack.Navigator
+<span class="add">  screenOptions={{
+    headerStyle: { backgroundColor: colors.paper },
+    headerTintColor: colors.ink,
+    headerTitleStyle: { fontFamily: type.fontUISb, fontSize: 17, letterSpacing: -0.2 },
+    headerShadowVisible: false,
+    headerLargeTitle: false,
+    contentStyle: { backgroundColor: colors.paper },
+  }}</span>
+&gt;
+</pre>
+
+      <h4 id="f-home">src/screens/HomeScreen.tsx <span class="pill">Style</span></h4>
+      <p>Replace the StyleSheet block. JSX is unchanged.</p>
+<pre><span class="add">import { colors, radius, space, type } from '../theme';</span>
+
+const styles = StyleSheet.create({
+  container:    { flex: 1, backgroundColor: colors.paper },
+  buttons:      { flexDirection: 'row', gap: space[3], padding: space[4] },
+  button:       { flex: 1, backgroundColor: colors.ink, borderRadius: radius.md,
+                  paddingVertical: 14, alignItems: 'center' },
+  buttonText:   { color: colors.paper, fontSize: 15, fontFamily: type.fontUISb,
+                  letterSpacing: -0.1 },
+
+  searchWrapper:{ zIndex: 10, elevation: 10 },
+  searchRow:    { paddingHorizontal: space[4], paddingBottom: space[2] },
+  searchInput:  { borderWidth: 1, borderColor: colors.line, borderRadius: radius.md,
+                  paddingHorizontal: 14, paddingVertical: 12, fontSize: 16,
+                  backgroundColor: colors.paperAlt, color: colors.ink,
+                  fontFamily: type.fontUI },
+
+  dropdown:     { position: 'absolute', left: space[4], right: space[4], maxHeight: 320,
+                  borderWidth: 1, borderColor: colors.line, borderRadius: radius.md,
+                  backgroundColor: '#fff', overflow: 'hidden',
+                  shadowColor: '#1C1A16', shadowOffset: { width: 0, height: 8 },
+                  shadowOpacity: 0.10, shadowRadius: 24, elevation: 4 },
+  dropdownEmpty:{ padding: space[4], textAlign: 'center', color: colors.inkSubtle, fontSize: 14 },
+  resultRow:    { flexDirection: 'row', alignItems: 'flex-start', paddingHorizontal: 14,
+                  paddingVertical: 12, borderBottomWidth: StyleSheet.hairlineWidth,
+                  borderColor: colors.line },
+  resultBadge:  { fontSize: 9.5, fontFamily: type.fontMono, letterSpacing: 1,
+                  textTransform: 'uppercase', borderRadius: 3,
+                  paddingHorizontal: 6, paddingVertical: 2, marginRight: 10, marginTop: 2,
+                  overflow: 'hidden' },
+  badgeItem:    { backgroundColor: colors.ink, color: colors.paper },
+  badgeBox:     { color: colors.inkMuted, borderWidth: 1, borderColor: colors.line },
+  resultText:   { flex: 1 },
+  resultName:   { ...type.bodyMd, color: colors.ink },
+  resultDesc:   { ...type.caption, marginTop: 2 },
+
+  checkboxRow:  { flexDirection: 'row', alignItems: 'center',
+                  paddingHorizontal: space[4], paddingBottom: space[3] },
+  checkbox:     { width: 18, height: 18, borderRadius: 4, marginRight: 8,
+                  alignItems: 'center', justifyContent: 'center',
+                  borderWidth: 1.5, borderColor: colors.ink,
+                  backgroundColor: colors.ink },
+  checkboxChecked: { backgroundColor: colors.ink },
+  checkmark:    { color: colors.paper, fontSize: 11, lineHeight: 12, fontWeight: '700' },
+  checkboxLabel:{ fontSize: 13, color: colors.inkMuted, fontFamily: type.fontUI },
+});
+</pre>
+
+      <h4 id="f-box">src/screens/AddEditBoxScreen.tsx <span class="pill">Style</span> <span class="pill touch">Light JSX touch</span></h4>
+      <p>Two minimal JSX changes — wrap each label in <code>style={styles.label}</code> using the new mono caption style, and add a tiny dot inside the chip. Otherwise, replace styles + <code>PALETTE</code>.</p>
+<pre><span class="add">import { colors, radius, space, type, categoryPalette } from '../theme';</span>
+
+<span class="del">const PALETTE = ['#e53935', '#f4511e', /* ... 12 hexes ... */];</span>
+<span class="add">const PALETTE = categoryPalette;</span>
+
+<span class="cmt">// In JSX — chip body, add a colored dot before the text:</span>
+&lt;Pressable style={[styles.chip, ...]} onPress={...}&gt;
+<span class="add">  &lt;View style={[styles.chipDot, { backgroundColor: cat.color }]} /&gt;</span>
+  &lt;Text style={[styles.chipText, ...]}&gt;{cat.name}&lt;/Text&gt;
+&lt;/Pressable&gt;
+</pre>
+<pre>const styles = StyleSheet.create({
+  container:    { flex: 1, backgroundColor: colors.paper },
+  form:         { padding: space[4], gap: space[1] },
+
+  label:        { ...type.label, marginTop: space[4], marginBottom: space[1] },
+  required:     { color: colors.accent },
+
+  input:        { borderWidth: 1, borderColor: colors.line, borderRadius: radius.md,
+                  paddingHorizontal: 14, paddingVertical: 12, fontSize: 16,
+                  backgroundColor: colors.paperAlt, color: colors.ink,
+                  fontFamily: type.fontUI },
+  textArea:     { minHeight: 96, paddingTop: 12 },
+  charCount:    { ...type.mono, fontSize: 11, textAlign: 'right', marginTop: 2 },
+
+  imagePicker:  { height: 120, borderWidth: 1, borderStyle: 'dashed',
+                  borderColor: colors.line, borderRadius: radius.md,
+                  alignItems: 'center', justifyContent: 'center', gap: 6,
+                  backgroundColor: colors.paperAlt },
+  imagePickerText: { color: colors.inkSubtle, fontSize: 14, fontFamily: type.fontUI },
+  imagePickerIcon: { fontSize: 22, color: colors.inkSubtle },
+  imagePreview: { width: '100%', height: 200, borderRadius: radius.md,
+                  backgroundColor: colors.paperAlt },
+  imageChangeBtn: { alignSelf: 'flex-start', paddingHorizontal: 12, paddingVertical: 8,
+                    borderRadius: radius.sm, borderWidth: 1, borderColor: colors.line,
+                    marginTop: space[2] },
+  imageChangeBtnText: { color: colors.ink, fontSize: 13, fontFamily: type.fontUISb },
+
+  chipRow:      { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: space[1] },
+  chip:         { flexDirection: 'row', alignItems: 'center', gap: 6,
+                  paddingHorizontal: 12, paddingVertical: 7,
+                  borderRadius: radius.pill, borderWidth: 1, borderColor: colors.line,
+                  backgroundColor: colors.paper },
+  chipSelected: { backgroundColor: colors.ink, borderColor: colors.ink },
+  chipNew:      { borderStyle: 'dashed', borderColor: colors.line },
+  chipDot:      { width: 8, height: 8, borderRadius: 4 },
+  chipText:     { fontSize: 13, color: colors.inkMuted, fontFamily: type.fontUI },
+  chipTextSelected: { color: colors.paper },
+
+  newCatForm:   { marginTop: space[3], padding: space[3], borderWidth: 1,
+                  borderColor: colors.line, borderRadius: radius.md, gap: space[2],
+                  backgroundColor: colors.paperAlt },
+  colorLabel:   { ...type.label, marginTop: 4 },
+  colorGrid:    { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  swatch:       { width: 32, height: 32, borderRadius: 16 },
+  swatchSelected:{ borderWidth: 2, borderColor: colors.ink, transform: [{ scale: 1.1 }] },
+
+  saveBtn:      { marginTop: space[6], backgroundColor: colors.accent,
+                  borderRadius: radius.md, paddingVertical: 14, alignItems: 'center' },
+  saveBtnDisabled: { opacity: 0.5 },
+  saveBtnText:  { color: colors.accentInk, fontSize: 15, fontFamily: type.fontUISb },
+
+  cancelBtn:    { marginTop: space[3], borderRadius: radius.md, paddingVertical: 14,
+                  alignItems: 'center', borderWidth: 1, borderColor: colors.line,
+                  backgroundColor: 'transparent' },
+  cancelBtnText:{ color: colors.inkMuted, fontSize: 15, fontFamily: type.fontUISb },
+});
+</pre>
+
+      <h4 id="f-item">src/screens/AddEditItemScreen.tsx <span class="pill">Style</span></h4>
+      <p>Same recipe — replace the StyleSheet, swap raw hex for theme tokens. JSX stays.</p>
+<pre><span class="add">import { colors, radius, space, type } from '../theme';</span>
+
+const styles = StyleSheet.create({
+  container:    { flex: 1, backgroundColor: colors.paper },
+  flex:         { flex: 1 },
+  scroll:       { padding: space[4], paddingBottom: space[8] },
+  scrollFocused:{ paddingBottom: 320 },
+
+  label:        { ...type.label, marginTop: space[4], marginBottom: space[1] },
+
+  input:        { borderWidth: 1, borderColor: colors.line, borderRadius: radius.md,
+                  paddingHorizontal: 14, paddingVertical: 12, fontSize: 16,
+                  backgroundColor: colors.paperAlt, color: colors.ink,
+                  fontFamily: type.fontUI },
+  inputError:   { borderColor: colors.danger },
+  multiline:    { minHeight: 80 },
+  amountInput:  { width: 96, fontFamily: type.fontMono, textAlign: 'right' },
+  error:        { fontSize: 12, color: colors.danger, marginTop: 4, fontFamily: type.fontUI },
+
+  imageRow:     { flexDirection: 'row', alignItems: 'center', gap: space[3] },
+  thumbnail:    { width: 80, height: 80, borderRadius: radius.md,
+                  backgroundColor: colors.paperAlt },
+  removeBtn:    { paddingHorizontal: 14, paddingVertical: 8, borderRadius: radius.sm,
+                  borderWidth: 1, borderColor: colors.line },
+  removeBtnText:{ fontSize: 13, color: colors.inkMuted, fontFamily: type.fontUI },
+
+  photoBtn:     { borderWidth: 1, borderStyle: 'dashed', borderColor: colors.line,
+                  borderRadius: radius.md, paddingVertical: 12, alignItems: 'center',
+                  backgroundColor: colors.paperAlt },
+  photoBtnText: { fontSize: 14, color: colors.inkMuted, fontFamily: type.fontUISb },
+
+  pickedBox:    { flexDirection: 'row', alignItems: 'center', gap: 8,
+                  borderWidth: 1, borderColor: colors.accent, borderRadius: radius.md,
+                  paddingHorizontal: 14, paddingVertical: 12,
+                  backgroundColor: colors.accentSoft },
+  pickedBoxName:{ flex: 1, fontSize: 15, color: colors.ink, fontFamily: type.fontUIMd },
+  unpick:       { fontSize: 22, color: colors.accent, lineHeight: 26, paddingLeft: 8 },
+
+  boxDropdown:  { maxHeight: 220, borderWidth: 1, borderColor: colors.line,
+                  borderRadius: radius.md, backgroundColor: '#fff', marginBottom: 4,
+                  overflow: 'hidden' },
+  boxResult:    { paddingHorizontal: 14, paddingVertical: 12,
+                  borderBottomWidth: StyleSheet.hairlineWidth, borderColor: colors.line },
+  boxResultText:{ fontSize: 15, color: colors.ink, fontFamily: type.fontUI },
+
+  saveBtn:      { marginTop: space[7], backgroundColor: colors.accent,
+                  borderRadius: radius.md, paddingVertical: 14, alignItems: 'center' },
+  saveBtnText:  { color: colors.accentInk, fontSize: 15, fontFamily: type.fontUISb },
+  cancelBtn:    { marginTop: space[3], borderRadius: radius.md, paddingVertical: 14,
+                  alignItems: 'center', borderWidth: 1, borderColor: colors.line },
+  cancelBtnText:{ color: colors.inkMuted, fontSize: 15, fontFamily: type.fontUISb },
+});
+</pre>
+
+      <h4 id="f-fonts">Fonts — one-time setup <span class="pill new">Optional</span></h4>
+      <p>If you don't already load custom fonts, install <span class="mono">@expo-google-fonts/inter</span> and <span class="mono">@expo-google-fonts/jetbrains-mono</span> and gate render on <span class="mono">useFonts(...)</span>. If you'd rather skip fonts and stay system, drop the <span class="mono">fontFamily</span> values from the theme — every other token still works.</p>
+<pre><span class="cmt">// App.tsx — top of component</span>
+import { useFonts, Inter_400Regular, Inter_500Medium, Inter_600SemiBold } from '@expo-google-fonts/inter';
+import { JetBrainsMono_400Regular } from '@expo-google-fonts/jetbrains-mono';
+
+const [loaded] = useFonts({
+  Inter_400Regular, Inter_500Medium, Inter_600SemiBold,
+  JetBrainsMono_400Regular,
+});
+if (!loaded) return null;
+</pre>
+
+      <div class="callout" style="margin-top:32px;">
+        <b>Acceptance check.</b> After applying: tap through Home → Add Item → pick a box → Save. The flow should behave identically. Visually: warm paper background, ink-black primary buttons, cedar-amber Save buttons on edit screens, mono uppercase field labels, dotted chips for categories. No blue should remain anywhere in the app.
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Workshop Inventory · Visual direction · Inter + JetBrains Mono · Cedar #B6651E
+</footer>
+
+</body>
+</html>
