@@ -53,7 +53,7 @@ export async function exportBackup(db: SQLiteDatabase): Promise<void> {
   };
 
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const filename = `workshop-backup-${timestamp}.wsinv`;
+  const filename = `shelfmate-backup-${timestamp}.wsinv`;
   const fileUri = (FileSystem.cacheDirectory ?? '') + filename;
   await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(backup), {
     encoding: FileSystem.EncodingType.UTF8,
