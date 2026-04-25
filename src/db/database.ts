@@ -10,8 +10,12 @@ export async function initDatabase(db: SQLiteDatabase): Promise<void> {
     'ALTER TABLE boxes ADD COLUMN photoUri TEXT',
     'ALTER TABLE boxes ADD COLUMN categoryId INTEGER REFERENCES categories(id) ON DELETE SET NULL',
   ]) {
-    try { await db.execAsync(sql); } catch { /* column already exists */ }
+    try { await db.execAsync(sql); } catch (_e) { /* column already exists */ }
   }
+  // Migrate existing items table
+  try {
+    await db.execAsync('ALTER TABLE items ADD COLUMN amount INTEGER NOT NULL DEFAULT 1');
+  } catch (_e) { /* column already exists */ }
 }
 
 export async function getBoxes(db: SQLiteDatabase): Promise<Box[]> {
@@ -75,13 +79,15 @@ export async function createItem(
   name: string,
   description: string,
   photoUri: string | null,
+  amount: number,
 ): Promise<void> {
   await db.runAsync(
-    'INSERT INTO items (boxId, name, description, photoUri) VALUES (?, ?, ?, ?)',
+    'INSERT INTO items (boxId, name, description, photoUri, amount) VALUES (?, ?, ?, ?, ?)',
     boxId,
     name,
     description,
     photoUri,
+    amount,
   );
 }
 
@@ -91,13 +97,37 @@ export async function updateItem(
   name: string,
   description: string,
   photoUri: string | null,
+  amount: number,
 ): Promise<void> {
   await db.runAsync(
-    'UPDATE items SET name = ?, description = ?, photoUri = ? WHERE id = ?',
+    'UPDATE items SET name = ?, description = ?, photoUri = ?, amount = ? WHERE id = ?',
     name,
     description,
     photoUri,
+    amount,
     id,
+  );
+}
+
+export async function getRecentBoxes(db: SQLiteDatabase): Promise<Box[]> {
+  return db.getAllAsync<Box>(
+    `SELECT * FROM boxes
+     ORDER BY COALESCE(
+       (SELECT MAX(createdAt) FROM items WHERE boxId = boxes.id), ''
+     ) DESC, createdAt DESC
+     LIMIT 10`,
+  );
+}
+
+export async function searchBoxes(db: SQLiteDatabase, query: string): Promise<Box[]> {
+  return db.getAllAsync<Box>(
+    `SELECT * FROM boxes
+     WHERE name LIKE ?
+     ORDER BY COALESCE(
+       (SELECT MAX(createdAt) FROM items WHERE boxId = boxes.id), ''
+     ) DESC, createdAt DESC
+     LIMIT 10`,
+    `%${query}%`,
   );
 }
 

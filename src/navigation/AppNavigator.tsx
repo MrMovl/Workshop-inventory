@@ -10,7 +10,7 @@ export type RootStackParamList = {
   BoxList: undefined;
   BoxDetail: { boxId: number; boxName: string };
   AddEditBox: { boxId?: number; boxName?: string };
-  AddEditItem: { itemId?: number; boxId: number };
+  AddEditItem: { itemId?: number; boxId?: number };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

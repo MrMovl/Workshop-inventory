@@ -20,6 +20,7 @@ export interface Item {
   name: string;
   description: string;
   photoUri: string | null;
+  amount: number;
   createdAt: string;
 }
 
