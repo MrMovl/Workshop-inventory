@@ -3,11 +3,6 @@ import { Box, Category, Item } from '../types';
 import { CREATE_BOXES_TABLE, CREATE_CATEGORIES_TABLE, CREATE_ITEMS_TABLE } from './schema';
 
 export async function initDatabase(db: SQLiteDatabase): Promise<void> {
-  await db.execAsync(CREATE_BOXES_TABLE + CREATE_ITEMS_TABLE);
-  try {
-    await db.execAsync('ALTER TABLE items ADD COLUMN amount INTEGER NOT NULL DEFAULT 1');
-  } catch (_e) {
-    // column already exists on prior installs
   await db.execAsync(CREATE_CATEGORIES_TABLE + CREATE_BOXES_TABLE + CREATE_ITEMS_TABLE);
   // Migrate existing boxes table — ignore errors if columns already exist
   for (const sql of [
@@ -15,8 +10,12 @@ export async function initDatabase(db: SQLiteDatabase): Promise<void> {
     'ALTER TABLE boxes ADD COLUMN photoUri TEXT',
     'ALTER TABLE boxes ADD COLUMN categoryId INTEGER REFERENCES categories(id) ON DELETE SET NULL',
   ]) {
-    try { await db.execAsync(sql); } catch { /* column already exists */ }
+    try { await db.execAsync(sql); } catch (_e) { /* column already exists */ }
   }
+  // Migrate existing items table
+  try {
+    await db.execAsync('ALTER TABLE items ADD COLUMN amount INTEGER NOT NULL DEFAULT 1');
+  } catch (_e) { /* column already exists */ }
 }
 
 export async function getBoxes(db: SQLiteDatabase): Promise<Box[]> {
