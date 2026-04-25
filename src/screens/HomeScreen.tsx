@@ -80,7 +80,11 @@ export default function HomeScreen({ navigation }: Props) {
         </View>
       </View>
 
-      <SettingsModal visible={settingsVisible} onClose={() => setSettingsVisible(false)} />
+      <SettingsModal
+        visible={settingsVisible}
+        onClose={() => setSettingsVisible(false)}
+        onImportSuccess={() => navigation.reset({ index: 0, routes: [{ name: 'Home' }] })}
+      />
 
       <View style={styles.searchRow}>
         <TextInput

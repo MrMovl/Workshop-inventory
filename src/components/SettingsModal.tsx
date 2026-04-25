@@ -1,15 +1,59 @@
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Alert, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useSQLiteContext } from 'expo-sqlite';
 import { colors, radius, space, type as t } from '../theme';
 import { useLocale } from '../i18n/LanguageContext';
 import type { Locale } from '../i18n/translations';
+import { exportBackup, importBackup } from '../utils/backup';
 
 interface Props {
   visible: boolean;
   onClose: () => void;
+  onImportSuccess?: () => void;
 }
 
-export default function SettingsModal({ visible, onClose }: Props) {
+export default function SettingsModal({ visible, onClose, onImportSuccess }: Props) {
   const [language, setLanguage] = useLocale();
+  const db = useSQLiteContext();
+  const [busy, setBusy] = useState(false);
+
+  async function handleExport() {
+    setBusy(true);
+    try {
+      await exportBackup(db);
+    } catch (e) {
+      Alert.alert('Export failed', (e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function handleImportPress() {
+    Alert.alert(
+      'Overwrite all data?',
+      'Importing a backup will permanently delete all current boxes, items, and categories. This cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Import & overwrite',
+          style: 'destructive',
+          onPress: runImport,
+        },
+      ],
+    );
+  }
+
+  async function runImport() {
+    setBusy(true);
+    try {
+      await importBackup(db);
+      onImportSuccess ? onImportSuccess() : onClose();
+    } catch (e) {
+      Alert.alert('Import failed', (e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
@@ -36,8 +80,24 @@ export default function SettingsModal({ visible, onClose }: Props) {
 
           <View style={styles.divider} />
 
-          <Pressable style={styles.backupButton} onPress={() => {}}>
-            <Text style={styles.backupButtonText}>Backup</Text>
+          <Text style={styles.sectionLabel}>Backup & Restore</Text>
+
+          <Pressable
+            style={[styles.backupButton, busy && styles.buttonDisabled]}
+            onPress={handleExport}
+            disabled={busy}
+          >
+            <Text style={styles.backupButtonText}>
+              {busy ? 'Working…' : 'Export backup'}
+            </Text>
+          </Pressable>
+
+          <Pressable
+            style={[styles.importButton, busy && styles.buttonDisabled]}
+            onPress={handleImportPress}
+            disabled={busy}
+          >
+            <Text style={styles.importButtonText}>Import backup</Text>
           </Pressable>
         </Pressable>
       </Pressable>
@@ -113,6 +173,17 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     alignItems: 'center',
     backgroundColor: colors.paperAlt,
+    marginBottom: space[3],
   },
   backupButtonText: { fontSize: 15, fontWeight: '600', color: colors.ink },
+  importButton: {
+    borderWidth: 1,
+    borderColor: colors.line,
+    borderRadius: radius.md,
+    paddingVertical: 12,
+    alignItems: 'center',
+    backgroundColor: colors.paperAlt,
+  },
+  importButtonText: { fontSize: 15, fontWeight: '600', color: colors.danger },
+  buttonDisabled: { opacity: 0.45 },
 });
