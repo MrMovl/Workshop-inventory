@@ -9,9 +9,10 @@ import { exportBackup, importBackup } from '../utils/backup';
 interface Props {
   visible: boolean;
   onClose: () => void;
+  onImportSuccess?: () => void;
 }
 
-export default function SettingsModal({ visible, onClose }: Props) {
+export default function SettingsModal({ visible, onClose, onImportSuccess }: Props) {
   const [language, setLanguage] = useLocale();
   const db = useSQLiteContext();
   const [busy, setBusy] = useState(false);
@@ -46,7 +47,7 @@ export default function SettingsModal({ visible, onClose }: Props) {
     setBusy(true);
     try {
       await importBackup(db);
-      onClose();
+      onImportSuccess ? onImportSuccess() : onClose();
     } catch (e) {
       Alert.alert('Import failed', (e as Error).message);
     } finally {
