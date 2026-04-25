@@ -39,6 +39,7 @@ export interface Translations {
   box_imageLabel: string;
   box_changePhoto: string;
   box_tapToAddPhoto: string;
+  box_removePhoto: string;
   box_categoryLabel: string;
   box_newCategory: string;
   box_categoryNamePlaceholder: string;
@@ -60,6 +61,7 @@ export interface Translations {
   item_photoLabel: string;
   item_removePhoto: string;
   item_addPhoto: string;
+  item_changePhoto: string;
   item_boxLabel: string;
   item_boxSearchPlaceholder: string;
   item_boxIn: string;
@@ -98,6 +100,7 @@ export const translations: Record<Locale, Translations> = {
     box_imageLabel: 'Image',
     box_changePhoto: 'Change photo',
     box_tapToAddPhoto: 'Tap to add photo',
+    box_removePhoto: 'Remove',
     box_categoryLabel: 'Category',
     box_newCategory: '+ New',
     box_categoryNamePlaceholder: 'Category name',
@@ -118,6 +121,7 @@ export const translations: Record<Locale, Translations> = {
     item_photoLabel: 'Photo',
     item_removePhoto: 'Remove',
     item_addPhoto: 'Add Photo',
+    item_changePhoto: 'Change photo',
     item_boxLabel: 'Box *',
     item_boxSearchPlaceholder: 'Tap to see recent boxes or search…',
     item_boxIn: 'In',
@@ -155,6 +159,7 @@ export const translations: Record<Locale, Translations> = {
     box_imageLabel: 'Bild',
     box_changePhoto: 'Foto ändern',
     box_tapToAddPhoto: 'Tippen, um Foto hinzuzufügen',
+    box_removePhoto: 'Entfernen',
     box_categoryLabel: 'Kategorie',
     box_newCategory: '+ Neu',
     box_categoryNamePlaceholder: 'Kategoriename',
@@ -175,6 +180,7 @@ export const translations: Record<Locale, Translations> = {
     item_photoLabel: 'Foto',
     item_removePhoto: 'Entfernen',
     item_addPhoto: 'Foto hinzufügen',
+    item_changePhoto: 'Foto ändern',
     item_boxLabel: 'Box *',
     item_boxSearchPlaceholder: 'Tippen, um aktuelle Boxen zu sehen oder zu suchen…',
     item_boxIn: 'In',
