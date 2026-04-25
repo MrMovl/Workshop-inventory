@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Image,
@@ -13,7 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSQLiteContext } from 'expo-sqlite';
 import * as ImagePicker from 'expo-image-picker';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { createItem, searchBoxes } from '../db/database';
+import { createItem, getRecentBoxes, searchBoxes } from '../db/database';
 import { Box } from '../types';
 import { RootStackParamList } from '../navigation/AppNavigator';
 
@@ -29,18 +29,34 @@ export default function AddEditItemScreen({ navigation }: Props) {
   const [pickedBox, setPickedBox] = useState<Box | null>(null);
   const [boxQuery, setBoxQuery] = useState('');
   const [boxResults, setBoxResults] = useState<Box[]>([]);
+  const [boxInputFocused, setBoxInputFocused] = useState(false);
+  const blurTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [nameError, setNameError] = useState('');
   const [amountError, setAmountError] = useState('');
   const [boxError, setBoxError] = useState('');
 
   useEffect(() => {
-    if (!boxQuery.trim()) {
-      setBoxResults([]);
-      return;
+    return () => { if (blurTimer.current) clearTimeout(blurTimer.current); };
+  }, []);
+
+  useEffect(() => {
+    if (!boxInputFocused) return;
+    if (boxQuery.trim()) {
+      searchBoxes(db, boxQuery).then(setBoxResults);
+    } else {
+      getRecentBoxes(db).then(setBoxResults);
     }
-    searchBoxes(db, boxQuery).then(setBoxResults);
-  }, [boxQuery, db]);
+  }, [boxQuery, boxInputFocused, db]);
+
+  const onBoxFocus = useCallback(() => {
+    if (blurTimer.current) clearTimeout(blurTimer.current);
+    setBoxInputFocused(true);
+  }, []);
+
+  const onBoxBlur = useCallback(() => {
+    blurTimer.current = setTimeout(() => setBoxInputFocused(false), 150);
+  }, []);
 
   const pickImage = useCallback(async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -59,6 +75,8 @@ export default function AddEditItemScreen({ navigation }: Props) {
   }, []);
 
   const pickBox = useCallback((box: Box) => {
+    if (blurTimer.current) clearTimeout(blurTimer.current);
+    setBoxInputFocused(false);
     setPickedBox(box);
     setBoxQuery('');
     setBoxResults([]);
@@ -163,10 +181,12 @@ export default function AddEditItemScreen({ navigation }: Props) {
               style={[styles.input, boxError ? styles.inputError : null]}
               value={boxQuery}
               onChangeText={setBoxQuery}
-              placeholder="Search boxes…"
+              onFocus={onBoxFocus}
+              onBlur={onBoxBlur}
+              placeholder="Tap to see recent boxes or search by name…"
             />
             {boxError ? <Text style={styles.error}>{boxError}</Text> : null}
-            {boxResults.map(box => (
+            {boxInputFocused && boxResults.map(box => (
               <Pressable key={box.id} style={styles.boxResult} onPress={() => pickBox(box)}>
                 <Text style={styles.boxResultText}>{box.name}</Text>
               </Pressable>
