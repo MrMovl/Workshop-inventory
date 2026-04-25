@@ -8,7 +8,7 @@ export default function App() {
   return (
     <SQLiteProvider databaseName="workshop.db" onInit={initDatabase}>
       <NavigationContainer>
-        <StatusBar style="auto" />
+        <StatusBar style="dark" backgroundColor="#F4EFE6" />
         <AppNavigator />
       </NavigationContainer>
     </SQLiteProvider>

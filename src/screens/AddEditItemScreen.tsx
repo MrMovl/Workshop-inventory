@@ -16,6 +16,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import * as ImagePicker from 'expo-image-picker';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { createItem, getBoxById, getItemById, getRecentBoxes, searchBoxes, updateItem } from '../db/database';
+import { colors, radius, space, type as t } from '../theme';
 import { Box } from '../types';
 import { RootStackParamList } from '../navigation/AppNavigator';
 
@@ -243,87 +244,51 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  flex: { flex: 1 },
-  scroll: { padding: 16, paddingBottom: 40 },
-  scrollFocused: { paddingBottom: 320 },
-  label: { fontSize: 13, fontWeight: '600', color: '#444', marginTop: 16, marginBottom: 4 },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 16,
-    backgroundColor: '#f9f9f9',
-    color: '#111',
-  },
-  inputError: { borderColor: '#c00' },
-  multiline: { minHeight: 80 },
-  amountInput: { width: 100 },
-  error: { fontSize: 12, color: '#c00', marginTop: 4 },
-  imageRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  thumbnail: { width: 80, height: 80, borderRadius: 8, backgroundColor: '#eee' },
-  removeBtn: {
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
-  },
-  removeBtnText: { fontSize: 14, color: '#444' },
-  photoBtn: {
-    borderWidth: 1,
-    borderColor: '#1a73e8',
-    borderRadius: 8,
-    paddingVertical: 10,
-    alignItems: 'center',
-  },
-  photoBtnText: { fontSize: 15, color: '#1a73e8', fontWeight: '600' },
-  pickedBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#1a73e8',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    backgroundColor: '#e8f0fe',
-  },
-  pickedBoxName: { flex: 1, fontSize: 15, color: '#111' },
-  unpick: { fontSize: 22, color: '#1a73e8', lineHeight: 26, paddingLeft: 8 },
-  boxDropdown: {
-    maxHeight: 220,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    backgroundColor: '#fff',
-    marginBottom: 4,
-    overflow: 'hidden',
-  },
-  boxResult: {
-    paddingHorizontal: 12,
-    paddingVertical: 12,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: '#ddd',
-    backgroundColor: '#fff',
-  },
-  boxResultText: { fontSize: 15, color: '#111' },
-  saveBtn: {
-    marginTop: 32,
-    backgroundColor: '#1a73e8',
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  saveBtnText: { color: '#fff', fontSize: 16, fontWeight: '600' },
-  cancelBtn: {
-    marginTop: 12,
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ccc',
-  },
-  cancelBtnText: { color: '#444', fontSize: 16, fontWeight: '600' },
+  container:    { flex: 1, backgroundColor: colors.paper },
+  flex:         { flex: 1 },
+  scroll:       { padding: space[4], paddingBottom: space[8] },
+  scrollFocused:{ paddingBottom: 320 },
+
+  label:        { ...t.label, marginTop: space[4], marginBottom: space[1] },
+
+  input:        { borderWidth: 1, borderColor: colors.line, borderRadius: radius.md,
+                  paddingHorizontal: 14, paddingVertical: 12, fontSize: 16,
+                  backgroundColor: colors.paperAlt, color: colors.ink },
+  inputError:   { borderColor: colors.danger },
+  multiline:    { minHeight: 80 },
+  amountInput:  { width: 96, textAlign: 'right' },
+  error:        { fontSize: 12, color: colors.danger, marginTop: 4 },
+
+  imageRow:     { flexDirection: 'row', alignItems: 'center', gap: space[3] },
+  thumbnail:    { width: 80, height: 80, borderRadius: radius.md,
+                  backgroundColor: colors.paperAlt },
+  removeBtn:    { paddingHorizontal: 14, paddingVertical: 8, borderRadius: radius.sm,
+                  borderWidth: 1, borderColor: colors.line },
+  removeBtnText:{ fontSize: 13, color: colors.inkMuted },
+
+  photoBtn:     { borderWidth: 1, borderStyle: 'dashed', borderColor: colors.line,
+                  borderRadius: radius.md, paddingVertical: 12, alignItems: 'center',
+                  backgroundColor: colors.paperAlt },
+  photoBtnText: { fontSize: 14, color: colors.inkMuted, fontWeight: '600' },
+
+  pickedBox:    { flexDirection: 'row', alignItems: 'center', gap: 8,
+                  borderWidth: 1, borderColor: colors.accent, borderRadius: radius.md,
+                  paddingHorizontal: 14, paddingVertical: 12,
+                  backgroundColor: colors.accentSoft },
+  pickedBoxName:{ flex: 1, fontSize: 15, color: colors.ink, fontWeight: '500' },
+  unpick:       { fontSize: 22, color: colors.accent, lineHeight: 26, paddingLeft: 8 },
+
+  boxDropdown:  { maxHeight: 220, borderWidth: 1, borderColor: colors.line,
+                  borderRadius: radius.md, backgroundColor: '#fff', marginBottom: 4,
+                  overflow: 'hidden' },
+  boxResult:    { paddingHorizontal: 14, paddingVertical: 12,
+                  borderBottomWidth: StyleSheet.hairlineWidth, borderColor: colors.line },
+  boxResultText:{ fontSize: 15, color: colors.ink },
+
+  saveBtn:      { marginTop: space[7], backgroundColor: colors.accent,
+                  borderRadius: radius.md, paddingVertical: 14, alignItems: 'center' },
+  saveBtnText:  { color: colors.accentInk, fontSize: 15, fontWeight: '600' },
+  cancelBtn:    { marginTop: space[3], borderRadius: radius.md, paddingVertical: 14,
+                  alignItems: 'center', borderWidth: 1, borderColor: colors.line },
+  cancelBtnText:{ color: colors.inkMuted, fontSize: 15, fontWeight: '600' },
 });
