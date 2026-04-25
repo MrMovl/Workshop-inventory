@@ -161,9 +161,14 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
         {photoUri ? (
           <View style={styles.imageContainer}>
             <Image source={{ uri: photoUri }} style={styles.imagePreview} resizeMode="contain" />
-            <Pressable style={styles.imageChangeBtn} onPress={pickImage}>
-              <Text style={styles.imageChangeBtnText}>{tr.box_changePhoto}</Text>
-            </Pressable>
+            <View style={styles.imageActions}>
+              <Pressable style={styles.imageChangeBtn} onPress={pickImage}>
+                <Text style={styles.imageChangeBtnText}>{tr.box_changePhoto}</Text>
+              </Pressable>
+              <Pressable style={styles.imageChangeBtn} onPress={() => setPhotoUri(null)}>
+                <Text style={styles.imageChangeBtnText}>{tr.box_removePhoto}</Text>
+              </Pressable>
+            </View>
           </View>
         ) : (
           <Pressable style={styles.imagePicker} onPress={pickImage}>
@@ -271,9 +276,9 @@ const styles = StyleSheet.create({
   imageContainer:  { gap: 8 },
   imagePreview: { width: '100%', height: 200, borderRadius: radius.md,
                   backgroundColor: colors.paperAlt },
-  imageChangeBtn: { alignSelf: 'flex-start', paddingHorizontal: 12, paddingVertical: 8,
-                    borderRadius: radius.sm, borderWidth: 1, borderColor: colors.line,
-                    marginTop: space[2] },
+  imageActions: { flexDirection: 'row', gap: 8 },
+  imageChangeBtn: { paddingHorizontal: 12, paddingVertical: 8,
+                    borderRadius: radius.sm, borderWidth: 1, borderColor: colors.line },
   imageChangeBtnText: { color: colors.ink, fontSize: 13, fontWeight: '600' },
 
   chipRow:      { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: space[1] },

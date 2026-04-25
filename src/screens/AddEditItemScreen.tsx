@@ -203,22 +203,27 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
             />
             {amountError ? <Text style={styles.error}>{amountError}</Text> : null}
           </View>
-          <View style={styles.photoCol}>
-            <Text style={styles.label}>{tr.item_photoLabel}</Text>
-            {photoUri ? (
-              <View style={styles.imageRow}>
-                <Image source={{ uri: photoUri }} style={styles.thumbnail} />
-                <Pressable style={styles.removeBtn} onPress={() => setPhotoUri(null)}>
-                  <Text style={styles.removeBtnText}>{tr.item_removePhoto}</Text>
-                </Pressable>
-              </View>
-            ) : (
-              <Pressable style={styles.photoBtn} onPress={pickImage}>
-                <Text style={styles.photoBtnText}>{tr.item_addPhoto}</Text>
-              </Pressable>
-            )}
-          </View>
         </View>
+
+        <Text style={styles.label}>{tr.item_photoLabel}</Text>
+        {photoUri ? (
+          <View style={styles.imageContainer}>
+            <Image source={{ uri: photoUri }} style={styles.imagePreview} resizeMode="contain" />
+            <View style={styles.imageActions}>
+              <Pressable style={styles.imageChangeBtn} onPress={pickImage}>
+                <Text style={styles.imageChangeBtnText}>{tr.item_changePhoto}</Text>
+              </Pressable>
+              <Pressable style={styles.imageChangeBtn} onPress={() => setPhotoUri(null)}>
+                <Text style={styles.imageChangeBtnText}>{tr.item_removePhoto}</Text>
+              </Pressable>
+            </View>
+          </View>
+        ) : (
+          <Pressable style={styles.imagePicker} onPress={pickImage}>
+            <Text style={styles.imagePickerIcon}>📷</Text>
+            <Text style={styles.imagePickerText}>{tr.item_addPhoto}</Text>
+          </Pressable>
+        )}
 
         <Text style={styles.label}>{tr.item_boxLabel}</Text>
         {pickedBox ? (
@@ -283,21 +288,22 @@ const styles = StyleSheet.create({
   amountInput:  { width: 96, textAlign: 'right' },
   error:        { fontSize: 12, color: colors.danger, marginTop: 4 },
 
-  imageRow:     { flexDirection: 'row', alignItems: 'center', gap: space[3] },
-  thumbnail:    { width: 80, height: 80, borderRadius: radius.md,
+  imagePicker:  { height: 120, borderWidth: 1, borderStyle: 'dashed',
+                  borderColor: colors.line, borderRadius: radius.md,
+                  alignItems: 'center', justifyContent: 'center', gap: 6,
                   backgroundColor: colors.paperAlt },
-  removeBtn:    { paddingHorizontal: 14, paddingVertical: 8, borderRadius: radius.sm,
-                  borderWidth: 1, borderColor: colors.line },
-  removeBtnText:{ fontSize: 13, color: colors.inkMuted },
-
-  photoBtn:     { borderWidth: 1, borderStyle: 'dashed', borderColor: colors.line,
-                  borderRadius: radius.md, paddingVertical: 12, alignItems: 'center',
+  imagePickerIcon: { fontSize: 22, color: colors.inkSubtle },
+  imagePickerText: { color: colors.inkSubtle, fontSize: 14 },
+  imageContainer:  { gap: 8 },
+  imagePreview: { width: '100%', height: 200, borderRadius: radius.md,
                   backgroundColor: colors.paperAlt },
-  photoBtnText: { fontSize: 14, color: colors.inkMuted, fontWeight: '600' },
+  imageActions: { flexDirection: 'row', gap: 8 },
+  imageChangeBtn: { paddingHorizontal: 12, paddingVertical: 8,
+                    borderRadius: radius.sm, borderWidth: 1, borderColor: colors.line },
+  imageChangeBtnText: { color: colors.ink, fontSize: 13, fontWeight: '600' },
 
   amountPhotoRow:{ flexDirection: 'row', gap: 14, alignItems: 'flex-end' },
   amountCol:    { flexShrink: 0 },
-  photoCol:     { flex: 1 },
 
   pickedBox:    { flexDirection: 'row', alignItems: 'center', gap: 8,
                   borderWidth: 1, borderColor: colors.accent, borderRadius: radius.md,
