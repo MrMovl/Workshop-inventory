@@ -232,6 +232,10 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
           <Text style={styles.saveBtnText}>Save</Text>
         </Pressable>
 
+        <Pressable style={styles.cancelBtn} onPress={() => navigation.goBack()}>
+          <Text style={styles.cancelBtnText}>Cancel</Text>
+        </Pressable>
+
       </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -313,4 +317,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   saveBtnText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  cancelBtn: {
+    marginTop: 12,
+    borderRadius: 8,
+    paddingVertical: 14,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+  cancelBtnText: { color: '#444', fontSize: 16, fontWeight: '600' },
 });

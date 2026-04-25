@@ -231,6 +231,10 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
         >
           <Text style={styles.saveBtnText}>{saving ? 'Saving…' : 'Save Box'}</Text>
         </Pressable>
+
+        <Pressable style={styles.cancelBtn} onPress={() => navigation.goBack()}>
+          <Text style={styles.cancelBtnText}>Cancel</Text>
+        </Pressable>
       </ScrollView>
     </SafeAreaView>
   );
@@ -313,4 +317,13 @@ const styles = StyleSheet.create({
   },
   saveBtnDisabled: { opacity: 0.6 },
   saveBtnText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  cancelBtn: {
+    marginTop: 12,
+    borderRadius: 8,
+    paddingVertical: 14,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+  cancelBtnText: { color: '#444', fontSize: 16, fontWeight: '600' },
 });
