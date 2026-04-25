@@ -16,6 +16,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { createBox, createCategory, getBoxById, getCategories, updateBox } from '../db/database';
+import { persistPhoto } from '../utils/persistPhoto';
 import { colors, categoryPalette, radius, space, type as t } from '../theme';
 import { Category } from '../types';
 import { useTranslation } from '../i18n/LanguageContext';
@@ -82,7 +83,7 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
         : [],
       { compress: 0.8, format: ImageManipulator.SaveFormat.JPEG },
     );
-    setPhotoUri(resized.uri);
+    setPhotoUri(await persistPhoto(resized.uri));
   }
 
   async function handleSave() {
