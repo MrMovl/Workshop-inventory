@@ -135,6 +135,10 @@ export default function HomeScreen({ navigation }: Props) {
         </View>
         <Text style={styles.checkboxLabel}>Include boxes in search</Text>
       </Pressable>
+
+      {dropdownVisible && (
+        <Pressable style={styles.backdrop} onPress={() => setDropdownVisible(false)} />
+      )}
     </SafeAreaView>
   );
 }
@@ -150,7 +154,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
-  searchWrapper: { zIndex: 1, elevation: 1 },
+  searchWrapper: { zIndex: 10, elevation: 10 },
+  backdrop: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 5 },
   searchRow: { paddingHorizontal: 16, paddingBottom: 8 },
   searchInput: {
     borderWidth: 1,
