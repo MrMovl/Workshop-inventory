@@ -15,7 +15,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useSQLiteContext } from 'expo-sqlite';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { createBox, createCategory, getCategories } from '../db/database';
+import { createBox, createCategory, getBoxById, getCategories, updateBox } from '../db/database';
 import { Category } from '../types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AddEditBox'>;
@@ -30,8 +30,10 @@ const NAME_MAX = 100;
 const DESC_MAX = 500;
 const CAT_NAME_MAX = 50;
 
-export default function AddEditBoxScreen({ navigation }: Props) {
+export default function AddEditBoxScreen({ navigation, route }: Props) {
   const db = useSQLiteContext();
+  const { boxId } = route.params ?? {};
+
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [photoUri, setPhotoUri] = useState<string | null>(null);
@@ -45,6 +47,18 @@ export default function AddEditBoxScreen({ navigation }: Props) {
   useEffect(() => {
     getCategories(db).then(setCategories);
   }, [db]);
+
+  useEffect(() => {
+    if (!boxId) return;
+    (async () => {
+      const box = await getBoxById(db, boxId);
+      if (!box) return;
+      setName(box.name);
+      setDescription(box.description ?? '');
+      setPhotoUri(box.photoUri);
+      setSelectedCategoryId(box.categoryId);
+    })();
+  }, [db, boxId]);
 
   async function pickImage() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -84,7 +98,11 @@ export default function AddEditBoxScreen({ navigation }: Props) {
       if (showNewCategory && newCatName.trim()) {
         categoryId = await createCategory(db, newCatName.trim(), newCatColor);
       }
-      await createBox(db, trimmedName, description.trim(), photoUri, categoryId);
+      if (boxId) {
+        await updateBox(db, boxId, trimmedName, description.trim(), photoUri, categoryId);
+      } else {
+        await createBox(db, trimmedName, description.trim(), photoUri, categoryId);
+      }
       navigation.goBack();
     } finally {
       setSaving(false);
@@ -213,6 +231,10 @@ export default function AddEditBoxScreen({ navigation }: Props) {
         >
           <Text style={styles.saveBtnText}>{saving ? 'Saving…' : 'Save Box'}</Text>
         </Pressable>
+
+        <Pressable style={styles.cancelBtn} onPress={() => navigation.goBack()}>
+          <Text style={styles.cancelBtnText}>Cancel</Text>
+        </Pressable>
       </ScrollView>
     </SafeAreaView>
   );
@@ -295,4 +317,13 @@ const styles = StyleSheet.create({
   },
   saveBtnDisabled: { opacity: 0.6 },
   saveBtnText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  cancelBtn: {
+    marginTop: 12,
+    borderRadius: 8,
+    paddingVertical: 14,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+  cancelBtnText: { color: '#444', fontSize: 16, fontWeight: '600' },
 });

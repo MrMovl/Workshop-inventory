@@ -73,6 +73,14 @@ export async function getItemsByBox(db: SQLiteDatabase, boxId: number): Promise<
   return db.getAllAsync<Item>('SELECT * FROM items WHERE boxId = ? ORDER BY createdAt DESC', boxId);
 }
 
+export async function getItemById(db: SQLiteDatabase, id: number): Promise<Item | null> {
+  return db.getFirstAsync<Item>('SELECT * FROM items WHERE id = ?', id);
+}
+
+export async function getBoxById(db: SQLiteDatabase, id: number): Promise<Box | null> {
+  return db.getFirstAsync<Box>('SELECT * FROM boxes WHERE id = ?', id);
+}
+
 export async function createItem(
   db: SQLiteDatabase,
   boxId: number,
@@ -94,13 +102,15 @@ export async function createItem(
 export async function updateItem(
   db: SQLiteDatabase,
   id: number,
+  boxId: number,
   name: string,
   description: string,
   photoUri: string | null,
   amount: number,
 ): Promise<void> {
   await db.runAsync(
-    'UPDATE items SET name = ?, description = ?, photoUri = ?, amount = ? WHERE id = ?',
+    'UPDATE items SET boxId = ?, name = ?, description = ?, photoUri = ?, amount = ? WHERE id = ?',
+    boxId,
     name,
     description,
     photoUri,
@@ -133,6 +143,27 @@ export async function searchBoxes(db: SQLiteDatabase, query: string): Promise<Bo
 
 export async function deleteItem(db: SQLiteDatabase, id: number): Promise<void> {
   await db.runAsync('DELETE FROM items WHERE id = ?', id);
+}
+
+export async function getRecentAll(
+  db: SQLiteDatabase,
+  includeBoxes: boolean,
+  limit: number,
+): Promise<{ type: 'box' | 'item'; id: number; name: string; description: string }[]> {
+  if (includeBoxes) {
+    return db.getAllAsync(
+      `SELECT type, id, name, description FROM (
+         SELECT 'item' AS type, id, name, COALESCE(description, '') AS description, createdAt FROM items
+         UNION ALL
+         SELECT 'box' AS type, id, name, COALESCE(description, '') AS description, createdAt FROM boxes
+       ) ORDER BY createdAt DESC LIMIT ?`,
+      limit,
+    );
+  }
+  return db.getAllAsync(
+    `SELECT 'item' AS type, id, name, COALESCE(description, '') AS description FROM items ORDER BY createdAt DESC LIMIT ?`,
+    limit,
+  );
 }
 
 export async function searchAll(
