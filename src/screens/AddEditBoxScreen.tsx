@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import {
   Alert,
   Image,
+  Linking,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -16,6 +17,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { createBox, createCategory, getBoxById, getCategories, updateBox } from '../db/database';
+import { persistPhoto } from '../utils/persistPhoto';
 import { colors, categoryPalette, radius, space, type as t } from '../theme';
 import { Category } from '../types';
 import { useTranslation } from '../i18n/LanguageContext';
@@ -44,7 +46,7 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    getCategories(db).then(setCategories);
+    getCategories(db).then(setCategories).catch(console.error);
   }, [db]);
 
   useEffect(() => {
@@ -62,7 +64,10 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
   async function pickImage() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert(tr.box_permissionTitle, tr.box_permissionMessage);
+      Alert.alert(tr.box_permissionTitle, tr.box_permissionMessage, [
+        { text: tr.box_cancel, style: 'cancel' },
+        { text: tr.perm_openSettings, onPress: () => Linking.openSettings() },
+      ]);
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -82,7 +87,7 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
         : [],
       { compress: 0.8, format: ImageManipulator.SaveFormat.JPEG },
     );
-    setPhotoUri(resized.uri);
+    setPhotoUri(await persistPhoto(resized.uri));
   }
 
   async function handleSave() {

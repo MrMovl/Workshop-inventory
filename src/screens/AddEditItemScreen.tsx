@@ -3,6 +3,7 @@ import {
   Alert,
   Image,
   KeyboardAvoidingView,
+  Linking,
   Platform,
   Pressable,
   ScrollView,
@@ -13,7 +14,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSQLiteContext } from 'expo-sqlite';
+import * as ImageManipulator from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
+import { persistPhoto } from '../utils/persistPhoto';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { createItem, getBoxById, getItemById, getRecentBoxes, searchBoxes, updateItem } from '../db/database';
 import { colors, radius, space, type as t } from '../theme';
@@ -63,9 +66,9 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
   useEffect(() => {
     if (!boxInputFocused) return;
     if (boxQuery.trim()) {
-      searchBoxes(db, boxQuery).then(setBoxResults);
+      searchBoxes(db, boxQuery).then(setBoxResults).catch(() => setBoxResults([]));
     } else {
-      getRecentBoxes(db).then(setBoxResults);
+      getRecentBoxes(db).then(setBoxResults).catch(() => setBoxResults([]));
     }
   }, [boxQuery, boxInputFocused, db]);
 
@@ -81,16 +84,29 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
   const pickImage = useCallback(async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert(tr.item_permissionTitle, tr.item_permissionMessage);
+      Alert.alert(tr.item_permissionTitle, tr.item_permissionMessage, [
+        { text: tr.item_cancel, style: 'cancel' },
+        { text: tr.perm_openSettings, onPress: () => Linking.openSettings() },
+      ]);
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: 'images',
       allowsEditing: true,
-      quality: 0.8,
+      quality: 1,
     });
     if (!result.canceled) {
-      setPhotoUri(result.assets[0].uri);
+      const asset = result.assets[0];
+      const MAX = 600;
+      const ratio = Math.min(MAX / asset.width, MAX / asset.height, 1);
+      const resized = await ImageManipulator.manipulateAsync(
+        asset.uri,
+        ratio < 1
+          ? [{ resize: { width: Math.round(asset.width * ratio), height: Math.round(asset.height * ratio) } }]
+          : [],
+        { compress: 0.8, format: ImageManipulator.SaveFormat.JPEG },
+      );
+      setPhotoUri(await persistPhoto(resized.uri));
     }
   }, []);
 
