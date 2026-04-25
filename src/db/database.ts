@@ -6,7 +6,7 @@ export async function initDatabase(db: SQLiteDatabase): Promise<void> {
   await db.execAsync(CREATE_BOXES_TABLE + CREATE_ITEMS_TABLE);
   try {
     await db.execAsync('ALTER TABLE items ADD COLUMN amount INTEGER NOT NULL DEFAULT 1');
-  } catch {
+  } catch (_e) {
     // column already exists on prior installs
   await db.execAsync(CREATE_CATEGORIES_TABLE + CREATE_BOXES_TABLE + CREATE_ITEMS_TABLE);
   // Migrate existing boxes table — ignore errors if columns already exist
