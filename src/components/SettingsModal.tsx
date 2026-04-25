@@ -1,8 +1,7 @@
-import { useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors, radius, space, type as t } from '../theme';
-
-type Language = 'en' | 'de';
+import { useLocale } from '../i18n/LanguageContext';
+import type { Locale } from '../i18n/translations';
 
 interface Props {
   visible: boolean;
@@ -10,7 +9,7 @@ interface Props {
 }
 
 export default function SettingsModal({ visible, onClose }: Props) {
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useLocale();
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
@@ -25,7 +24,7 @@ export default function SettingsModal({ visible, onClose }: Props) {
 
           <Text style={styles.sectionLabel}>Language</Text>
           <View style={styles.radioGroup}>
-            {(['en', 'de'] as Language[]).map(lang => (
+            {(['en', 'de'] as Locale[]).map(lang => (
               <Pressable key={lang} style={styles.radioRow} onPress={() => setLanguage(lang)}>
                 <View style={[styles.radioOuter, language === lang && styles.radioOuterSelected]}>
                   {language === lang && <View style={styles.radioDot} />}
