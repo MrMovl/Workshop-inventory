@@ -24,7 +24,7 @@ export default function AppNavigator() {
       screenOptions={{
         headerStyle: { backgroundColor: colors.paper },
         headerTintColor: colors.ink,
-        headerTitleStyle: { fontSize: 17, letterSpacing: -0.2, fontWeight: '600' },
+        headerTitleStyle: { fontSize: 17, fontWeight: '600' },
         headerShadowVisible: false,
         headerLargeTitle: false,
         contentStyle: { backgroundColor: colors.paper },
