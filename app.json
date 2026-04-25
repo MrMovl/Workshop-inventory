@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Workshop Inventory",
-    "slug": "workshop-inventory",
+    "name": "ShelfMate",
+    "slug": "shelfmate",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -30,8 +30,8 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Allow Workshop Inventory to access your photos.",
-          "cameraPermission": "Allow Workshop Inventory to take photos of items."
+          "photosPermission": "Allow ShelfMate to access your photos.",
+          "cameraPermission": "Allow ShelfMate to take photos of items."
         }
       ],
       "expo-sqlite"

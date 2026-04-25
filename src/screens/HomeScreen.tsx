@@ -66,7 +66,7 @@ export default function HomeScreen({ navigation }: Props) {
       <View style={styles.header}>
         <View>
           <Text style={styles.headerCrumb}>Inventory</Text>
-          <Text style={styles.headerTitle}>My Workshop</Text>
+          <Text style={styles.headerTitle}>ShelfMate</Text>
         </View>
         <Text style={styles.headerCount}>{itemCount}</Text>
       </View>

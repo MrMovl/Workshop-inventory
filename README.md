@@ -1,4 +1,4 @@
-# Workshop Inventory
+# ShelfMate
 
 A local-only mobile app for Android and iOS that helps hobbyists track what's in their workshop — no account, no cloud, no hassle.
 
