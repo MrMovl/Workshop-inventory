@@ -15,6 +15,7 @@ import { getRecentAll, searchAll } from '../db/database';
 import { SearchResult } from '../types';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { colors, radius, space, type as t } from '../theme';
+import SettingsModal from '../components/SettingsModal';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -25,6 +26,7 @@ export default function HomeScreen({ navigation }: Props) {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [itemCount, setItemCount] = useState(0);
+  const [settingsVisible, setSettingsVisible] = useState(false);
 
   const loadResults = useCallback(async () => {
     setLoading(true);
@@ -68,8 +70,15 @@ export default function HomeScreen({ navigation }: Props) {
           <Text style={styles.headerCrumb}>Inventory</Text>
           <Text style={styles.headerTitle}>ShelfMate</Text>
         </View>
-        <Text style={styles.headerCount}>{itemCount}</Text>
+        <View style={styles.headerRight}>
+          <Pressable onPress={() => setSettingsVisible(true)} style={styles.gearButton} hitSlop={8}>
+            <Text style={styles.gearIcon}>⚙</Text>
+          </Pressable>
+          <Text style={styles.headerCount}>{itemCount}</Text>
+        </View>
       </View>
+
+      <SettingsModal visible={settingsVisible} onClose={() => setSettingsVisible(false)} />
 
       <View style={styles.searchRow}>
         <TextInput
@@ -135,7 +144,10 @@ const styles = StyleSheet.create({
                          borderBottomWidth: 1, borderColor: colors.line },
   headerCrumb:         { ...t.label },
   headerTitle:         { ...t.title, color: colors.ink, marginTop: 2 },
-  headerCount:         { ...t.mono, fontSize: 14, marginBottom: 2 },
+  headerRight:         { alignItems: 'flex-end', gap: 4 },
+  gearButton:          { padding: 2 },
+  gearIcon:            { fontSize: 18, color: colors.inkMuted },
+  headerCount:         { ...t.mono, fontSize: 14 },
 
   searchRow:           { paddingHorizontal: space[4], paddingTop: space[4], paddingBottom: space[2] },
   searchInput:         { borderWidth: 1, borderColor: colors.line, borderRadius: radius.md,
