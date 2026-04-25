@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
-import { Locale, Translations, languageConfig, translations } from './translations';
+import { Locale, Translations, translations } from './translations';
 
 interface LanguageContextValue {
   locale: Locale;
@@ -7,10 +7,22 @@ interface LanguageContextValue {
   t: Translations;
 }
 
+const SUPPORTED: Locale[] = ['en', 'de'];
+
+function detectLocale(): Locale {
+  try {
+    const tag = Intl.DateTimeFormat().resolvedOptions().locale; // e.g. "de-DE", "en-US"
+    const lang = tag.split('-')[0].toLowerCase();
+    return (SUPPORTED.includes(lang as Locale) ? lang : 'en') as Locale;
+  } catch {
+    return 'en';
+  }
+}
+
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocale] = useState<Locale>(languageConfig.locale);
+  const [locale, setLocale] = useState<Locale>(detectLocale);
   return (
     <LanguageContext.Provider value={{ locale, setLocale, t: translations[locale] }}>
       {children}
