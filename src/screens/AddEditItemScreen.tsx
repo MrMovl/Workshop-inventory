@@ -15,14 +15,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSQLiteContext } from 'expo-sqlite';
 import * as ImagePicker from 'expo-image-picker';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { createItem, getRecentBoxes, searchBoxes } from '../db/database';
+import { createItem, getBoxById, getItemById, getRecentBoxes, searchBoxes, updateItem } from '../db/database';
 import { Box } from '../types';
 import { RootStackParamList } from '../navigation/AppNavigator';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AddEditItem'>;
 
-export default function AddEditItemScreen({ navigation }: Props) {
+export default function AddEditItemScreen({ navigation, route }: Props) {
   const db = useSQLiteContext();
+  const { itemId } = route.params ?? {};
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -41,6 +42,20 @@ export default function AddEditItemScreen({ navigation }: Props) {
   useEffect(() => {
     return () => { if (blurTimer.current) clearTimeout(blurTimer.current); };
   }, []);
+
+  useEffect(() => {
+    if (!itemId) return;
+    (async () => {
+      const item = await getItemById(db, itemId);
+      if (!item) return;
+      setName(item.name);
+      setDescription(item.description ?? '');
+      setAmount(String(item.amount));
+      setPhotoUri(item.photoUri);
+      const box = await getBoxById(db, item.boxId);
+      if (box) setPickedBox(box);
+    })();
+  }, [db, itemId]);
 
   useEffect(() => {
     if (!boxInputFocused) return;
@@ -116,7 +131,11 @@ export default function AddEditItemScreen({ navigation }: Props) {
 
     if (!valid) return;
 
-    await createItem(db, pickedBox!.id, name.trim(), description.trim(), photoUri, parsedAmount);
+    if (itemId) {
+      await updateItem(db, itemId, pickedBox!.id, name.trim(), description.trim(), photoUri, parsedAmount);
+    } else {
+      await createItem(db, pickedBox!.id, name.trim(), description.trim(), photoUri, parsedAmount);
+    }
     navigation.goBack();
   }, [db, name, description, amount, photoUri, pickedBox, navigation]);
 
