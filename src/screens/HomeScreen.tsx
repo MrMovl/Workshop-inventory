@@ -22,7 +22,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 export default function HomeScreen({ navigation }: Props) {
   const db = useSQLiteContext();
   const [query, setQuery] = useState('');
-  const [includeBoxes, setIncludeBoxes] = useState(true);
+  const [includeBoxes, setIncludeBoxes] = useState(false);
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [itemCount, setItemCount] = useState(0);
