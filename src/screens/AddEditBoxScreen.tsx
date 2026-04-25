@@ -120,9 +120,10 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
     <SafeAreaView style={styles.container} edges={['bottom']}>
       <ScrollView contentContainerStyle={styles.form} keyboardShouldPersistTaps="handled">
         {/* Name */}
-        <Text style={styles.label}>
-          Name <Text style={styles.required}>*</Text>
-        </Text>
+        <View style={styles.labelRow}>
+          <Text style={styles.labelInRow}>Name <Text style={styles.required}>*</Text></Text>
+          <Text style={styles.charCount}>{name.length} / {NAME_MAX}</Text>
+        </View>
         <TextInput
           style={styles.input}
           value={name}
@@ -131,10 +132,12 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
           placeholder="e.g. Green Plastic Box 1"
           returnKeyType="next"
         />
-        <Text style={styles.charCount}>{name.length}/{NAME_MAX}</Text>
 
         {/* Description */}
-        <Text style={styles.label}>Description</Text>
+        <View style={styles.labelRow}>
+          <Text style={styles.labelInRow}>Description</Text>
+          <Text style={styles.charCount}>{description.length} / {DESC_MAX}</Text>
+        </View>
         <TextInput
           style={[styles.input, styles.textArea]}
           value={description}
@@ -145,7 +148,6 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
           numberOfLines={4}
           textAlignVertical="top"
         />
-        <Text style={styles.charCount}>{description.length}/{DESC_MAX}</Text>
 
         {/* Image */}
         <Text style={styles.label}>Image</Text>
@@ -241,7 +243,10 @@ const styles = StyleSheet.create({
   container:    { flex: 1, backgroundColor: colors.paper },
   form:         { padding: space[4], gap: space[1] },
 
+  labelRow:     { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline',
+                  marginTop: space[4], marginBottom: space[1] },
   label:        { ...t.label, marginTop: space[4], marginBottom: space[1] },
+  labelInRow:   { ...t.label },
   required:     { color: colors.accent },
 
   input:        { borderWidth: 1, borderColor: colors.line, borderRadius: radius.md,

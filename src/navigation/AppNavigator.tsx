@@ -28,7 +28,7 @@ export default function AppNavigator() {
         contentStyle: { backgroundColor: colors.paper },
       }}
     >
-      <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'My Workshop' }} />
+      <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="BoxList" component={BoxListScreen} options={{ title: 'Boxes' }} />
       <Stack.Screen
         name="BoxDetail"

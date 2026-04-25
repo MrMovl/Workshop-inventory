@@ -173,33 +173,39 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
           textAlignVertical="top"
         />
 
-        <Text style={styles.label}>Amount *</Text>
-        <TextInput
-          style={[styles.input, styles.amountInput, amountError ? styles.inputError : null]}
-          value={amount}
-          onChangeText={t => { setAmount(t); setAmountError(''); }}
-          keyboardType="number-pad"
-          returnKeyType="done"
-        />
-        {amountError ? <Text style={styles.error}>{amountError}</Text> : null}
-
-        <Text style={styles.label}>Photo</Text>
-        {photoUri ? (
-          <View style={styles.imageRow}>
-            <Image source={{ uri: photoUri }} style={styles.thumbnail} />
-            <Pressable style={styles.removeBtn} onPress={() => setPhotoUri(null)}>
-              <Text style={styles.removeBtnText}>Remove</Text>
-            </Pressable>
+        <View style={styles.amountPhotoRow}>
+          <View style={styles.amountCol}>
+            <Text style={styles.label}>Amount *</Text>
+            <TextInput
+              style={[styles.input, styles.amountInput, amountError ? styles.inputError : null]}
+              value={amount}
+              onChangeText={t => { setAmount(t); setAmountError(''); }}
+              keyboardType="number-pad"
+              returnKeyType="done"
+            />
+            {amountError ? <Text style={styles.error}>{amountError}</Text> : null}
           </View>
-        ) : (
-          <Pressable style={styles.photoBtn} onPress={pickImage}>
-            <Text style={styles.photoBtnText}>Add Photo</Text>
-          </Pressable>
-        )}
+          <View style={styles.photoCol}>
+            <Text style={styles.label}>Photo</Text>
+            {photoUri ? (
+              <View style={styles.imageRow}>
+                <Image source={{ uri: photoUri }} style={styles.thumbnail} />
+                <Pressable style={styles.removeBtn} onPress={() => setPhotoUri(null)}>
+                  <Text style={styles.removeBtnText}>Remove</Text>
+                </Pressable>
+              </View>
+            ) : (
+              <Pressable style={styles.photoBtn} onPress={pickImage}>
+                <Text style={styles.photoBtnText}>Add Photo</Text>
+              </Pressable>
+            )}
+          </View>
+        </View>
 
         <Text style={styles.label}>Box *</Text>
         {pickedBox ? (
           <View style={[styles.pickedBox, boxError ? styles.inputError : null]}>
+            <Text style={styles.pickedBoxLbl}>In</Text>
             <Text style={styles.pickedBoxName} numberOfLines={1}>{pickedBox.name}</Text>
             <Pressable onPress={unpickBox} hitSlop={8}>
               <Text style={styles.unpick}>×</Text>
@@ -271,10 +277,15 @@ const styles = StyleSheet.create({
                   backgroundColor: colors.paperAlt },
   photoBtnText: { fontSize: 14, color: colors.inkMuted, fontWeight: '600' },
 
+  amountPhotoRow:{ flexDirection: 'row', gap: 14, alignItems: 'flex-end' },
+  amountCol:    { flexShrink: 0 },
+  photoCol:     { flex: 1 },
+
   pickedBox:    { flexDirection: 'row', alignItems: 'center', gap: 8,
                   borderWidth: 1, borderColor: colors.accent, borderRadius: radius.md,
                   paddingHorizontal: 14, paddingVertical: 12,
                   backgroundColor: colors.accentSoft },
+  pickedBoxLbl: { ...t.label, color: colors.accent, marginRight: 4 },
   pickedBoxName:{ flex: 1, fontSize: 15, color: colors.ink, fontWeight: '500' },
   unpick:       { fontSize: 22, color: colors.accent, lineHeight: 26, paddingLeft: 8 },
 
