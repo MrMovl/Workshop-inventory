@@ -18,6 +18,7 @@ import { RootStackParamList } from '../navigation/AppNavigator';
 import { createBox, createCategory, getBoxById, getCategories, updateBox } from '../db/database';
 import { colors, categoryPalette, radius, space, type as t } from '../theme';
 import { Category } from '../types';
+import { useTranslation } from '../i18n/LanguageContext';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AddEditBox'>;
 
@@ -29,6 +30,7 @@ const CAT_NAME_MAX = 50;
 
 export default function AddEditBoxScreen({ navigation, route }: Props) {
   const db = useSQLiteContext();
+  const tr = useTranslation();
   const { boxId } = route.params ?? {};
 
   const [name, setName] = useState('');
@@ -60,7 +62,7 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
   async function pickImage() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permission needed', 'Allow photo access to attach an image.');
+      Alert.alert(tr.box_permissionTitle, tr.box_permissionMessage);
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -86,7 +88,7 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
   async function handleSave() {
     const trimmedName = name.trim();
     if (!trimmedName) {
-      Alert.alert('Name required', 'Please enter a name for the box.');
+      Alert.alert(tr.box_nameRequiredTitle, tr.box_nameRequiredMessage);
       return;
     }
     setSaving(true);
@@ -121,7 +123,7 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
       <ScrollView contentContainerStyle={styles.form} keyboardShouldPersistTaps="handled">
         {/* Name */}
         <View style={styles.labelRow}>
-          <Text style={styles.labelInRow}>Name <Text style={styles.required}>*</Text></Text>
+          <Text style={styles.labelInRow}>{tr.box_nameLabel} <Text style={styles.required}>*</Text></Text>
           <Text style={styles.charCount}>{name.length} / {NAME_MAX}</Text>
         </View>
         <TextInput
@@ -129,13 +131,13 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
           value={name}
           onChangeText={setName}
           maxLength={NAME_MAX}
-          placeholder="e.g. Green Plastic Box 1"
+          placeholder={tr.box_namePlaceholder}
           returnKeyType="next"
         />
 
         {/* Description */}
         <View style={styles.labelRow}>
-          <Text style={styles.labelInRow}>Description</Text>
+          <Text style={styles.labelInRow}>{tr.box_descriptionLabel}</Text>
           <Text style={styles.charCount}>{description.length} / {DESC_MAX}</Text>
         </View>
         <TextInput
@@ -143,30 +145,30 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
           value={description}
           onChangeText={setDescription}
           maxLength={DESC_MAX}
-          placeholder="Optional details…"
+          placeholder={tr.box_descriptionPlaceholder}
           multiline
           numberOfLines={4}
           textAlignVertical="top"
         />
 
         {/* Image */}
-        <Text style={styles.label}>Image</Text>
+        <Text style={styles.label}>{tr.box_imageLabel}</Text>
         {photoUri ? (
           <View style={styles.imageContainer}>
             <Image source={{ uri: photoUri }} style={styles.imagePreview} resizeMode="contain" />
             <Pressable style={styles.imageChangeBtn} onPress={pickImage}>
-              <Text style={styles.imageChangeBtnText}>Change photo</Text>
+              <Text style={styles.imageChangeBtnText}>{tr.box_changePhoto}</Text>
             </Pressable>
           </View>
         ) : (
           <Pressable style={styles.imagePicker} onPress={pickImage}>
             <Text style={styles.imagePickerIcon}>📷</Text>
-            <Text style={styles.imagePickerText}>Tap to add photo</Text>
+            <Text style={styles.imagePickerText}>{tr.box_tapToAddPhoto}</Text>
           </Pressable>
         )}
 
         {/* Category */}
-        <Text style={styles.label}>Category</Text>
+        <Text style={styles.label}>{tr.box_categoryLabel}</Text>
         <View style={styles.chipRow}>
           {categories.map(cat => (
             <Pressable
@@ -191,7 +193,7 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
             onPress={toggleNewCategory}
           >
             <Text style={[styles.chipText, showNewCategory && styles.chipTextSelected]}>
-              + New
+              {tr.box_newCategory}
             </Text>
           </Pressable>
         </View>
@@ -203,9 +205,9 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
               value={newCatName}
               onChangeText={setNewCatName}
               maxLength={CAT_NAME_MAX}
-              placeholder="Category name"
+              placeholder={tr.box_categoryNamePlaceholder}
             />
-            <Text style={styles.colorLabel}>Color</Text>
+            <Text style={styles.colorLabel}>{tr.box_colorLabel}</Text>
             <View style={styles.colorGrid}>
               {PALETTE.map(color => (
                 <Pressable
@@ -228,11 +230,11 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
           onPress={handleSave}
           disabled={saving}
         >
-          <Text style={styles.saveBtnText}>{saving ? 'Saving…' : 'Save Box'}</Text>
+          <Text style={styles.saveBtnText}>{saving ? tr.box_saving : tr.box_save}</Text>
         </Pressable>
 
         <Pressable style={styles.cancelBtn} onPress={() => navigation.goBack()}>
-          <Text style={styles.cancelBtnText}>Cancel</Text>
+          <Text style={styles.cancelBtnText}>{tr.box_cancel}</Text>
         </Pressable>
       </ScrollView>
     </SafeAreaView>

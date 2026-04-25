@@ -16,11 +16,13 @@ import { SearchResult } from '../types';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { colors, radius, space, type as t } from '../theme';
 import SettingsModal from '../components/SettingsModal';
+import { useTranslation } from '../i18n/LanguageContext';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 export default function HomeScreen({ navigation }: Props) {
   const db = useSQLiteContext();
+  const tr = useTranslation();
   const [query, setQuery] = useState('');
   const [includeBoxes, setIncludeBoxes] = useState(true);
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -67,7 +69,7 @@ export default function HomeScreen({ navigation }: Props) {
     <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.headerCrumb}>Inventory</Text>
+          <Text style={styles.headerCrumb}>{tr.home_crumb}</Text>
           <Text style={styles.headerTitle}>ShelfMate</Text>
         </View>
         <View style={styles.headerRight}>
@@ -83,7 +85,7 @@ export default function HomeScreen({ navigation }: Props) {
       <View style={styles.searchRow}>
         <TextInput
           style={styles.searchInput}
-          placeholder="Search items and boxes…"
+          placeholder={tr.home_searchPlaceholder}
           placeholderTextColor={colors.inkSubtle}
           value={query}
           onChangeText={setQuery}
@@ -95,14 +97,14 @@ export default function HomeScreen({ navigation }: Props) {
         <View style={[styles.checkbox, includeBoxes && styles.checkboxChecked]}>
           {includeBoxes && <Text style={styles.checkmark}>✓</Text>}
         </View>
-        <Text style={styles.checkboxLabel}>Include boxes in search</Text>
+        <Text style={styles.checkboxLabel}>{tr.home_includeBoxes}</Text>
       </Pressable>
 
       <ScrollView style={styles.resultScroll} keyboardShouldPersistTaps="handled">
         {loading ? (
           <ActivityIndicator style={styles.spinner} color={colors.inkSubtle} />
         ) : results.length === 0 ? (
-          <Text style={styles.emptyText}>No results</Text>
+          <Text style={styles.emptyText}>{tr.home_noResults}</Text>
         ) : (
           <View style={styles.resultList}>
             {results.map(item => (
@@ -112,7 +114,7 @@ export default function HomeScreen({ navigation }: Props) {
                 onPress={() => handleSelect(item)}
               >
                 <Text style={[styles.resultBadge, item.type === 'box' ? styles.badgeBox : styles.badgeItem]}>
-                  {item.type === 'box' ? 'Box' : 'Item'}
+                  {item.type === 'box' ? tr.home_badgeBox : tr.home_badgeItem}
                 </Text>
                 <View style={styles.resultText}>
                   <Text style={styles.resultName}>{item.name}</Text>
@@ -126,10 +128,10 @@ export default function HomeScreen({ navigation }: Props) {
 
       <View style={styles.buttons}>
         <Pressable style={styles.buttonSecondary} onPress={() => navigation.navigate('AddEditBox', {})}>
-          <Text style={styles.buttonSecondaryText}>+ New Box</Text>
+          <Text style={styles.buttonSecondaryText}>{tr.home_newBox}</Text>
         </Pressable>
         <Pressable style={styles.button} onPress={() => navigation.navigate('AddEditItem', {})}>
-          <Text style={styles.buttonText}>+ New Item</Text>
+          <Text style={styles.buttonText}>{tr.home_newItem}</Text>
         </Pressable>
       </View>
     </SafeAreaView>

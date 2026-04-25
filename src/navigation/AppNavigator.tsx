@@ -5,6 +5,7 @@ import BoxListScreen from '../screens/BoxListScreen';
 import BoxDetailScreen from '../screens/BoxDetailScreen';
 import AddEditBoxScreen from '../screens/AddEditBoxScreen';
 import AddEditItemScreen from '../screens/AddEditItemScreen';
+import { useTranslation } from '../i18n/LanguageContext';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -17,6 +18,7 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
+  const t = useTranslation();
   return (
     <Stack.Navigator
       screenOptions={{
@@ -29,7 +31,7 @@ export default function AppNavigator() {
       }}
     >
       <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="BoxList" component={BoxListScreen} options={{ title: 'Boxes' }} />
+      <Stack.Screen name="BoxList" component={BoxListScreen} options={{ title: t.nav_boxes }} />
       <Stack.Screen
         name="BoxDetail"
         component={BoxDetailScreen}
@@ -38,12 +40,12 @@ export default function AppNavigator() {
       <Stack.Screen
         name="AddEditBox"
         component={AddEditBoxScreen}
-        options={({ route }) => ({ title: route.params.boxId ? 'Edit Box' : 'New Box' })}
+        options={({ route }) => ({ title: route.params.boxId ? t.nav_editBox : t.nav_newBox })}
       />
       <Stack.Screen
         name="AddEditItem"
         component={AddEditItemScreen}
-        options={({ route }) => ({ title: route.params.itemId ? 'Edit Item' : 'New Item' })}
+        options={({ route }) => ({ title: route.params.itemId ? t.nav_editItem : t.nav_newItem })}
       />
     </Stack.Navigator>
   );
