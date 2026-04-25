@@ -19,11 +19,13 @@ import { createItem, getBoxById, getItemById, getRecentBoxes, searchBoxes, updat
 import { colors, radius, space, type as t } from '../theme';
 import { Box } from '../types';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { useTranslation } from '../i18n/LanguageContext';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AddEditItem'>;
 
 export default function AddEditItemScreen({ navigation, route }: Props) {
   const db = useSQLiteContext();
+  const tr = useTranslation();
   const { itemId } = route.params ?? {};
 
   const [name, setName] = useState('');
@@ -79,7 +81,7 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
   const pickImage = useCallback(async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permission needed', 'Allow access to your photo library to add a photo.');
+      Alert.alert(tr.item_permissionTitle, tr.item_permissionMessage);
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -109,7 +111,7 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
     let valid = true;
 
     if (!name.trim()) {
-      setNameError('Name is required.');
+      setNameError(tr.item_nameRequired);
       valid = false;
     } else {
       setNameError('');
@@ -117,14 +119,14 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
 
     const parsedAmount = parseInt(amount, 10);
     if (!amount.trim() || isNaN(parsedAmount) || parsedAmount < 1) {
-      setAmountError('Amount must be a positive number.');
+      setAmountError(tr.item_amountError);
       valid = false;
     } else {
       setAmountError('');
     }
 
     if (!pickedBox) {
-      setBoxError('A box is required.');
+      setBoxError(tr.item_boxRequired);
       valid = false;
     } else {
       setBoxError('');
@@ -152,22 +154,22 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
         keyboardShouldPersistTaps="handled"
       >
 
-        <Text style={styles.label}>Name *</Text>
+        <Text style={styles.label}>{tr.item_nameLabel}</Text>
         <TextInput
           style={[styles.input, nameError ? styles.inputError : null]}
           value={name}
           onChangeText={t => { setName(t); if (t.trim()) setNameError(''); }}
-          placeholder="e.g. Wood screws M4×20"
+          placeholder={tr.item_namePlaceholder}
           returnKeyType="next"
         />
         {nameError ? <Text style={styles.error}>{nameError}</Text> : null}
 
-        <Text style={styles.label}>Description</Text>
+        <Text style={styles.label}>{tr.item_descriptionLabel}</Text>
         <TextInput
           style={[styles.input, styles.multiline]}
           value={description}
           onChangeText={setDescription}
-          placeholder="Any extra detail…"
+          placeholder={tr.item_descriptionPlaceholder}
           multiline
           numberOfLines={3}
           textAlignVertical="top"
@@ -175,7 +177,7 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
 
         <View style={styles.amountPhotoRow}>
           <View style={styles.amountCol}>
-            <Text style={styles.label}>Amount *</Text>
+            <Text style={styles.label}>{tr.item_amountLabel}</Text>
             <TextInput
               style={[styles.input, styles.amountInput, amountError ? styles.inputError : null]}
               value={amount}
@@ -186,26 +188,26 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
             {amountError ? <Text style={styles.error}>{amountError}</Text> : null}
           </View>
           <View style={styles.photoCol}>
-            <Text style={styles.label}>Photo</Text>
+            <Text style={styles.label}>{tr.item_photoLabel}</Text>
             {photoUri ? (
               <View style={styles.imageRow}>
                 <Image source={{ uri: photoUri }} style={styles.thumbnail} />
                 <Pressable style={styles.removeBtn} onPress={() => setPhotoUri(null)}>
-                  <Text style={styles.removeBtnText}>Remove</Text>
+                  <Text style={styles.removeBtnText}>{tr.item_removePhoto}</Text>
                 </Pressable>
               </View>
             ) : (
               <Pressable style={styles.photoBtn} onPress={pickImage}>
-                <Text style={styles.photoBtnText}>Add Photo</Text>
+                <Text style={styles.photoBtnText}>{tr.item_addPhoto}</Text>
               </Pressable>
             )}
           </View>
         </View>
 
-        <Text style={styles.label}>Box *</Text>
+        <Text style={styles.label}>{tr.item_boxLabel}</Text>
         {pickedBox ? (
           <View style={[styles.pickedBox, boxError ? styles.inputError : null]}>
-            <Text style={styles.pickedBoxLbl}>In</Text>
+            <Text style={styles.pickedBoxLbl}>{tr.item_boxIn}</Text>
             <Text style={styles.pickedBoxName} numberOfLines={1}>{pickedBox.name}</Text>
             <Pressable onPress={unpickBox} hitSlop={8}>
               <Text style={styles.unpick}>×</Text>
@@ -228,7 +230,7 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
               onChangeText={setBoxQuery}
               onFocus={onBoxFocus}
               onBlur={onBoxBlur}
-              placeholder="Tap to see recent boxes or search…"
+              placeholder={tr.item_boxSearchPlaceholder}
             />
             {boxError ? <Text style={styles.error}>{boxError}</Text> : null}
           </>
@@ -236,11 +238,11 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
         {pickedBox && boxError ? <Text style={styles.error}>{boxError}</Text> : null}
 
         <Pressable style={styles.saveBtn} onPress={save}>
-          <Text style={styles.saveBtnText}>Save</Text>
+          <Text style={styles.saveBtnText}>{tr.item_save}</Text>
         </Pressable>
 
         <Pressable style={styles.cancelBtn} onPress={() => navigation.goBack()}>
-          <Text style={styles.cancelBtnText}>Cancel</Text>
+          <Text style={styles.cancelBtnText}>{tr.item_cancel}</Text>
         </Pressable>
 
       </ScrollView>
