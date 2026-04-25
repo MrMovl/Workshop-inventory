@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Image,
+  KeyboardAvoidingView,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -120,7 +122,15 @@ export default function AddEditItemScreen({ navigation }: Props) {
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom']}>
-      <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
+      <KeyboardAvoidingView
+        style={styles.flex}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
+        keyboardVerticalOffset={Platform.OS === 'android' ? 80 : 0}
+      >
+      <ScrollView
+        contentContainerStyle={[styles.scroll, boxInputFocused && styles.scrollFocused]}
+        keyboardShouldPersistTaps="handled"
+      >
 
         <Text style={styles.label}>Name *</Text>
         <TextInput
@@ -204,13 +214,16 @@ export default function AddEditItemScreen({ navigation }: Props) {
         </Pressable>
 
       </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
+  flex: { flex: 1 },
   scroll: { padding: 16, paddingBottom: 40 },
+  scrollFocused: { paddingBottom: 320 },
   label: { fontSize: 13, fontWeight: '600', color: '#444', marginTop: 16, marginBottom: 4 },
   input: {
     borderWidth: 1,
