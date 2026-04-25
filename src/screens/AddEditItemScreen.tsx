@@ -177,20 +177,24 @@ export default function AddEditItemScreen({ navigation }: Props) {
           </View>
         ) : (
           <>
+            {boxInputFocused && boxResults.length > 0 && (
+              <View style={styles.boxDropdown}>
+                {boxResults.map(box => (
+                  <Pressable key={box.id} style={styles.boxResult} onPress={() => pickBox(box)}>
+                    <Text style={styles.boxResultText}>{box.name}</Text>
+                  </Pressable>
+                ))}
+              </View>
+            )}
             <TextInput
               style={[styles.input, boxError ? styles.inputError : null]}
               value={boxQuery}
               onChangeText={setBoxQuery}
               onFocus={onBoxFocus}
               onBlur={onBoxBlur}
-              placeholder="Tap to see recent boxes or search by name…"
+              placeholder="Tap to see recent boxes or search…"
             />
             {boxError ? <Text style={styles.error}>{boxError}</Text> : null}
-            {boxInputFocused && boxResults.map(box => (
-              <Pressable key={box.id} style={styles.boxResult} onPress={() => pickBox(box)}>
-                <Text style={styles.boxResultText}>{box.name}</Text>
-              </Pressable>
-            ))}
           </>
         )}
         {pickedBox && boxError ? <Text style={styles.error}>{boxError}</Text> : null}
@@ -252,6 +256,15 @@ const styles = StyleSheet.create({
   },
   pickedBoxName: { flex: 1, fontSize: 15, color: '#111' },
   unpick: { fontSize: 22, color: '#1a73e8', lineHeight: 26, paddingLeft: 8 },
+  boxDropdown: {
+    maxHeight: 220,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    marginBottom: 4,
+    overflow: 'hidden',
+  },
   boxResult: {
     paddingHorizontal: 12,
     paddingVertical: 12,

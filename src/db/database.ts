@@ -111,21 +111,21 @@ export async function updateItem(
 
 export async function getRecentBoxes(db: SQLiteDatabase): Promise<Box[]> {
   return db.getAllAsync<Box>(
-    `SELECT b.* FROM boxes b
-     LEFT JOIN items i ON i.boxId = b.id
-     GROUP BY b.id
-     ORDER BY COALESCE(MAX(i.createdAt), '') DESC, b.createdAt DESC
+    `SELECT * FROM boxes
+     ORDER BY COALESCE(
+       (SELECT MAX(createdAt) FROM items WHERE boxId = boxes.id), ''
+     ) DESC, createdAt DESC
      LIMIT 10`,
   );
 }
 
 export async function searchBoxes(db: SQLiteDatabase, query: string): Promise<Box[]> {
   return db.getAllAsync<Box>(
-    `SELECT b.* FROM boxes b
-     LEFT JOIN items i ON i.boxId = b.id
-     WHERE b.name LIKE ?
-     GROUP BY b.id
-     ORDER BY COALESCE(MAX(i.createdAt), '') DESC, b.createdAt DESC
+    `SELECT * FROM boxes
+     WHERE name LIKE ?
+     ORDER BY COALESCE(
+       (SELECT MAX(createdAt) FROM items WHERE boxId = boxes.id), ''
+     ) DESC, createdAt DESC
      LIMIT 10`,
     `%${query}%`,
   );
