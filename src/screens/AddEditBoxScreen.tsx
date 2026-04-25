@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import {
   Alert,
   Image,
+  Linking,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -45,7 +46,7 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    getCategories(db).then(setCategories);
+    getCategories(db).then(setCategories).catch(console.error);
   }, [db]);
 
   useEffect(() => {
@@ -63,7 +64,10 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
   async function pickImage() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert(tr.box_permissionTitle, tr.box_permissionMessage);
+      Alert.alert(tr.box_permissionTitle, tr.box_permissionMessage, [
+        { text: tr.box_cancel, style: 'cancel' },
+        { text: tr.perm_openSettings, onPress: () => Linking.openSettings() },
+      ]);
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({

@@ -24,6 +24,9 @@ export interface Translations {
   home_badgeBox: string;
   home_badgeItem: string;
 
+  // Shared
+  perm_openSettings: string;
+
   // AddEditBoxScreen
   box_permissionTitle: string;
   box_permissionMessage: string;
@@ -82,6 +85,8 @@ export const translations: Record<Locale, Translations> = {
     home_badgeBox: 'Box',
     home_badgeItem: 'Item',
 
+    perm_openSettings: 'Open Settings',
+
     box_permissionTitle: 'Permission needed',
     box_permissionMessage: 'Allow photo access to attach an image.',
     box_nameRequiredTitle: 'Name required',
@@ -136,6 +141,8 @@ export const translations: Record<Locale, Translations> = {
     home_newItem: '+ Neuer Artikel',
     home_badgeBox: 'Box',
     home_badgeItem: 'Artikel',
+
+    perm_openSettings: 'Einstellungen öffnen',
 
     box_permissionTitle: 'Zugriff benötigt',
     box_permissionMessage: 'Bitte Fotobibliothek-Zugriff erlauben, um ein Bild hinzuzufügen.',

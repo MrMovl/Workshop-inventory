@@ -3,6 +3,7 @@ import {
   Alert,
   Image,
   KeyboardAvoidingView,
+  Linking,
   Platform,
   Pressable,
   ScrollView,
@@ -65,9 +66,9 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
   useEffect(() => {
     if (!boxInputFocused) return;
     if (boxQuery.trim()) {
-      searchBoxes(db, boxQuery).then(setBoxResults);
+      searchBoxes(db, boxQuery).then(setBoxResults).catch(() => setBoxResults([]));
     } else {
-      getRecentBoxes(db).then(setBoxResults);
+      getRecentBoxes(db).then(setBoxResults).catch(() => setBoxResults([]));
     }
   }, [boxQuery, boxInputFocused, db]);
 
@@ -83,7 +84,10 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
   const pickImage = useCallback(async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert(tr.item_permissionTitle, tr.item_permissionMessage);
+      Alert.alert(tr.item_permissionTitle, tr.item_permissionMessage, [
+        { text: tr.item_cancel, style: 'cancel' },
+        { text: tr.perm_openSettings, onPress: () => Linking.openSettings() },
+      ]);
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
