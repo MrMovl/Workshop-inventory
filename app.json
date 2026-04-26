@@ -21,7 +21,11 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.reibisch.shelfmate"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -35,6 +39,11 @@
         }
       ],
       "expo-sqlite"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "e7012e1e-3e46-4f4d-a19f-8d52732549d1"
+      }
+    }
   }
 }
