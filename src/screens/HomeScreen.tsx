@@ -90,7 +90,7 @@ export default function HomeScreen({ navigation }: Props) {
         <TextInput
           style={styles.searchInput}
           placeholder={tr.home_searchPlaceholder}
-          placeholderTextColor={colors.inkSubtle}
+          placeholderTextColor={colors.inkMuted}
           value={query}
           onChangeText={setQuery}
           autoCorrect={false}
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   resultName:          { ...t.bodyMd, color: colors.ink },
   resultDesc:          { ...t.caption, marginTop: 2 },
   spinner:             { marginVertical: 16 },
-  emptyText:           { padding: space[4], textAlign: 'center', color: colors.inkSubtle, fontSize: 14 },
+  emptyText:           { padding: space[4], textAlign: 'center', color: colors.inkMuted, fontSize: 14 },
 
   buttons:             { flexDirection: 'row', gap: space[3],
                          padding: space[4], borderTopWidth: 1, borderColor: colors.line },

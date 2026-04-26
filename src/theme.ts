@@ -38,6 +38,6 @@ export const type = {
   body:    { fontSize: 16 },
   bodyMd:  { fontSize: 15, fontWeight: '500' as const },
   caption: { fontSize: 13, color: colors.inkMuted },
-  label:   { fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase' as const, color: colors.inkSubtle, fontWeight: '500' as const },
+  label:   { fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase' as const, color: colors.inkMuted, fontWeight: '500' as const },
   mono:    { fontSize: 12, color: colors.inkSubtle },
 };

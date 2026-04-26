@@ -190,6 +190,7 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
           value={name}
           onChangeText={t => { setName(t); if (t.trim()) setNameError(''); }}
           placeholder={tr.item_namePlaceholder}
+          placeholderTextColor={colors.inkMuted}
           returnKeyType="next"
         />
         {nameError ? <Text style={styles.error}>{nameError}</Text> : null}
@@ -200,6 +201,7 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
           value={description}
           onChangeText={setDescription}
           placeholder={tr.item_descriptionPlaceholder}
+          placeholderTextColor={colors.inkMuted}
           multiline
           numberOfLines={3}
           textAlignVertical="top"
@@ -266,6 +268,7 @@ export default function AddEditItemScreen({ navigation, route }: Props) {
               onFocus={onBoxFocus}
               onBlur={onBoxBlur}
               placeholder={tr.item_boxSearchPlaceholder}
+              placeholderTextColor={colors.inkMuted}
             />
             {boxError ? <Text style={styles.error}>{boxError}</Text> : null}
           </>
@@ -312,8 +315,8 @@ const styles = StyleSheet.create({
                   borderColor: colors.line, borderRadius: radius.md,
                   alignItems: 'center', justifyContent: 'center', gap: 6,
                   backgroundColor: colors.paperAlt },
-  imagePickerIcon: { fontSize: 22, color: colors.inkSubtle },
-  imagePickerText: { color: colors.inkSubtle, fontSize: 14 },
+  imagePickerIcon: { fontSize: 22, color: colors.inkMuted },
+  imagePickerText: { color: colors.inkMuted, fontSize: 14 },
   imageContainer:  { gap: 8 },
   imagePreview: { width: '100%', height: 200, borderRadius: radius.md,
                   backgroundColor: colors.paperAlt },

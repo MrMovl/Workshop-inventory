@@ -151,6 +151,7 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
           onChangeText={setName}
           maxLength={NAME_MAX}
           placeholder={tr.box_namePlaceholder}
+          placeholderTextColor={colors.inkMuted}
           returnKeyType="next"
         />
 
@@ -165,6 +166,7 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
           onChangeText={setDescription}
           maxLength={DESC_MAX}
           placeholder={tr.box_descriptionPlaceholder}
+          placeholderTextColor={colors.inkMuted}
           multiline
           numberOfLines={4}
           textAlignVertical="top"
@@ -230,6 +232,7 @@ export default function AddEditBoxScreen({ navigation, route }: Props) {
               onChangeText={setNewCatName}
               maxLength={CAT_NAME_MAX}
               placeholder={tr.box_categoryNamePlaceholder}
+              placeholderTextColor={colors.inkMuted}
             />
             <Text style={styles.colorLabel}>{tr.box_colorLabel}</Text>
             <View style={styles.colorGrid}>
@@ -291,8 +294,8 @@ const styles = StyleSheet.create({
                   borderColor: colors.line, borderRadius: radius.md,
                   alignItems: 'center', justifyContent: 'center', gap: 6,
                   backgroundColor: colors.paperAlt },
-  imagePickerIcon: { fontSize: 22, color: colors.inkSubtle },
-  imagePickerText: { color: colors.inkSubtle, fontSize: 14 },
+  imagePickerIcon: { fontSize: 22, color: colors.inkMuted },
+  imagePickerText: { color: colors.inkMuted, fontSize: 14 },
   imageContainer:  { gap: 8 },
   imagePreview: { width: '100%', height: 200, borderRadius: radius.md,
                   backgroundColor: colors.paperAlt },
