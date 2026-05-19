@@ -10,8 +10,8 @@ interface Props {
 
 // Height of the button bar: padding (16 top + 16 bottom) + button (14+14 vert padding + ~22 text)
 const BUTTON_BAR_HEIGHT = 82;
-// Height of header (~80) + search row (~72) + checkbox row (~40)
-const ABOVE_SEARCH_HEIGHT = 192;
+// Height of header (~80) + search row (~64) — places card just below the search input
+const ABOVE_SEARCH_HEIGHT = 152;
 
 export default function GuidedTour({ step, onSkip }: Props) {
   const tr = useTranslation();
