@@ -24,9 +24,11 @@ export default function GuidedTour({ step, onSkip }: Props) {
 
   return (
     <View style={styles.overlay} pointerEvents="box-none">
-      <View style={[styles.card, isSearchStep
-        ? { top: insets.top + ABOVE_SEARCH_HEIGHT + 8 }
-        : { bottom: insets.bottom + BUTTON_BAR_HEIGHT + 8 }
+      <View style={[
+        styles.card,
+        isSearchStep
+          ? { top: insets.top + ABOVE_SEARCH_HEIGHT + 8, right: space[4], width: '52%' }
+          : { bottom: insets.bottom + BUTTON_BAR_HEIGHT + 8, left: space[4], right: space[4] },
       ]}>
         {/* Progress trail */}
         <View style={styles.progressRow}>
@@ -66,8 +68,6 @@ const styles = StyleSheet.create({
 
   card: {
     position: 'absolute',
-    left: space[4],
-    right: space[4],
     backgroundColor: colors.paper,
     borderRadius: radius.lg,
     borderWidth: 1.5,
