@@ -52,6 +52,15 @@ export interface Translations {
   box_deleteConfirmMessage: string;
   box_deleteConfirm: string;
 
+  // Guided tour
+  tour_step1_title: string;
+  tour_step1_desc: string;
+  tour_step2_title: string;
+  tour_step2_desc: string;
+  tour_step3_title: string;
+  tour_step3_desc: string;
+  tour_skip: string;
+
   // AddEditItemScreen
   item_permissionTitle: string;
   item_permissionMessage: string;
@@ -94,6 +103,14 @@ export const translations: Record<Locale, Translations> = {
     home_newItem: '+ New Item',
     home_badgeBox: 'Box',
     home_badgeItem: 'Item',
+
+    tour_step1_title: 'Create your first box',
+    tour_step1_desc: 'Boxes hold your items. Tap "+ New Box" below to get started.',
+    tour_step2_title: 'Add an item to the box',
+    tour_step2_desc: 'Now tap "+ New Item" and assign it to the box you just created.',
+    tour_step3_title: 'Search for your item',
+    tour_step3_desc: 'Type anything in the search bar above to find items instantly.',
+    tour_skip: 'Skip tour',
 
     perm_openSettings: 'Open Settings',
 
@@ -161,6 +178,14 @@ export const translations: Record<Locale, Translations> = {
     home_newItem: '+ Neuer Artikel',
     home_badgeBox: 'Box',
     home_badgeItem: 'Artikel',
+
+    tour_step1_title: 'Erste Box erstellen',
+    tour_step1_desc: 'Boxen enthalten deine Artikel. Tippe unten auf „+ Neue Box".',
+    tour_step2_title: 'Artikel zur Box hinzufügen',
+    tour_step2_desc: 'Tippe auf „+ Neuer Artikel" und weise ihn der gerade erstellten Box zu.',
+    tour_step3_title: 'Artikel suchen',
+    tour_step3_desc: 'Gib etwas in die Suchleiste oben ein, um Artikel sofort zu finden.',
+    tour_skip: 'Tour überspringen',
 
     perm_openSettings: 'Einstellungen öffnen',
 

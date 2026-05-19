@@ -16,6 +16,7 @@ import { SearchResult } from '../types';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { colors, radius, space, type as t } from '../theme';
 import SettingsModal from '../components/SettingsModal';
+import GuidedTour from '../components/GuidedTour';
 import { useTranslation } from '../i18n/LanguageContext';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
@@ -28,7 +29,11 @@ export default function HomeScreen({ navigation }: Props) {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [itemCount, setItemCount] = useState(0);
+  const [boxCount, setBoxCount] = useState(0);
+  const [countsLoaded, setCountsLoaded] = useState(false);
   const [settingsVisible, setSettingsVisible] = useState(false);
+  // null = not yet determined; 0|1|2 = active step; 'done' = dismissed
+  const [tourStep, setTourStep] = useState<0 | 1 | 2 | 'done' | null>(null);
 
   const loadResults = useCallback(async () => {
     setLoading(true);
@@ -43,9 +48,31 @@ export default function HomeScreen({ navigation }: Props) {
   }, [db, query, includeBoxes]);
 
   const refreshCount = useCallback(async () => {
-    const row = await db.getFirstAsync<{ n: number }>('SELECT COUNT(*) AS n FROM items');
-    setItemCount(row?.n ?? 0);
+    const [itemRow, boxRow] = await Promise.all([
+      db.getFirstAsync<{ n: number }>('SELECT COUNT(*) AS n FROM items'),
+      db.getFirstAsync<{ n: number }>('SELECT COUNT(*) AS n FROM boxes'),
+    ]);
+    setItemCount(itemRow?.n ?? 0);
+    setBoxCount(boxRow?.n ?? 0);
+    setCountsLoaded(true);
   }, [db]);
+
+  // Initialize tour once real counts are available
+  useEffect(() => {
+    if (!countsLoaded || tourStep !== null) return;
+    setTourStep(itemCount === 0 && boxCount === 0 ? 0 : 'done');
+  }, [countsLoaded, itemCount, boxCount, tourStep]);
+
+  // Advance tour when user returns with new data
+  useEffect(() => {
+    if (tourStep === 0 && boxCount > 0) setTourStep(1);
+    else if (tourStep === 1 && itemCount > 0) setTourStep(2);
+  }, [tourStep, boxCount, itemCount]);
+
+  // Dismiss step 3 when user starts searching
+  useEffect(() => {
+    if (tourStep === 2 && query.trim().length > 0) setTourStep('done');
+  }, [tourStep, query]);
 
   useEffect(() => { loadResults(); }, [loadResults]);
   useEffect(() => { refreshCount(); }, [refreshCount]);
@@ -138,6 +165,10 @@ export default function HomeScreen({ navigation }: Props) {
           <Text style={styles.buttonText}>{tr.home_newItem}</Text>
         </Pressable>
       </View>
+
+      {(tourStep === 0 || tourStep === 1 || tourStep === 2) && (
+        <GuidedTour step={tourStep} onSkip={() => setTourStep('done')} />
+      )}
     </SafeAreaView>
   );
 }
