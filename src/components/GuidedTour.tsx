@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, radius, space, type as t } from '../theme';
 import { useTranslation } from '../i18n/LanguageContext';
 
@@ -7,8 +8,12 @@ interface Props {
   onSkip: () => void;
 }
 
+// Height of the button bar: padding (16 top + 16 bottom) + button (14+14 vert padding + ~22 text)
+const BUTTON_BAR_HEIGHT = 82;
+
 export default function GuidedTour({ step, onSkip }: Props) {
   const tr = useTranslation();
+  const insets = useSafeAreaInsets();
 
   const isSearchStep = step === 2;
 
@@ -17,7 +22,7 @@ export default function GuidedTour({ step, onSkip }: Props) {
 
   return (
     <View style={styles.overlay} pointerEvents="box-none">
-      <View style={[styles.card, isSearchStep ? styles.cardTop : styles.cardBottom]}>
+      <View style={[styles.card, isSearchStep ? styles.cardTop : { bottom: insets.bottom + BUTTON_BAR_HEIGHT + 8 }]}>
         {/* Progress trail */}
         <View style={styles.progressRow}>
           <View style={styles.dots}>
@@ -69,9 +74,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 6,
-  },
-  cardBottom: {
-    bottom: 88,
   },
   cardTop: {
     top: 150,
