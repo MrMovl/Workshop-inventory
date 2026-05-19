@@ -10,6 +10,8 @@ interface Props {
 
 // Height of the button bar: padding (16 top + 16 bottom) + button (14+14 vert padding + ~22 text)
 const BUTTON_BAR_HEIGHT = 82;
+// Height of header (~80) + search row (~72) + checkbox row (~40)
+const ABOVE_SEARCH_HEIGHT = 192;
 
 export default function GuidedTour({ step, onSkip }: Props) {
   const tr = useTranslation();
@@ -22,7 +24,10 @@ export default function GuidedTour({ step, onSkip }: Props) {
 
   return (
     <View style={styles.overlay} pointerEvents="box-none">
-      <View style={[styles.card, isSearchStep ? styles.cardTop : { bottom: insets.bottom + BUTTON_BAR_HEIGHT + 8 }]}>
+      <View style={[styles.card, isSearchStep
+        ? { top: insets.top + ABOVE_SEARCH_HEIGHT + 8 }
+        : { bottom: insets.bottom + BUTTON_BAR_HEIGHT + 8 }
+      ]}>
         {/* Progress trail */}
         <View style={styles.progressRow}>
           <View style={styles.dots}>
@@ -75,10 +80,6 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 6,
   },
-  cardTop: {
-    top: 150,
-  },
-
   progressRow: {
     flexDirection: 'row',
     alignItems: 'center',
